@@ -10,7 +10,7 @@ Plug 'neovim/nvim-lspconfig'
 call plug#end()
 
 let mapleader=";"
-set guifont=Inconsolata:h11
+set guifont=Inconsolata\ for\ Powerline:h11
 
 set relativenumber
 set number
@@ -66,6 +66,10 @@ nmap <leader>cd :cd %:h<CR>
 nmap <leader>lcd :lcd %:h<CR>
 
 autocmd BufWritePre * :%s/\s\+$//e
+
+au BufRead,BufNewFile *.make set syntax=make
+
+:let g:NERDTreeWinSize=45
 
 lua << EOF
 require'nvim-treesitter.configs'.setup {
@@ -175,4 +179,10 @@ lsp_config.efm.setup{
 lsp_config.tsserver.setup{
   on_attach = on_attach,
 }
+
+lsp_config.gopls.setup{
+  on_attach = on_attach, 
+}
+
+lsp_config.cmake.setup{}
 EOF
