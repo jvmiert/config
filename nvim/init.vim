@@ -181,8 +181,15 @@ lsp_config.tsserver.setup{
 }
 
 lsp_config.gopls.setup{
-  on_attach = on_attach, 
+  on_attach = on_attach,
 }
 
-lsp_config.cmake.setup{}
+lsp_config.cmake.setup{
+  on_attach = on_attach,
+}
+
+lsp_config.pyright.setup{
+  on_attach = on_attach,
+  root_dir = lsp_config.util.root_pattern(".git", "setup.py",  "setup.cfg", "pyproject.toml", "requirements.txt")
+}
 EOF
