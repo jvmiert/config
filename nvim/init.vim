@@ -182,6 +182,15 @@ lsp_config.tsserver.setup{
 
 lsp_config.gopls.setup{
   on_attach = on_attach,
+  settings = {
+    gopls = {
+      analyses = {
+        unusedparams = true,
+        shadow = true,
+      },
+      staticcheck = true,
+    },
+  },
 }
 
 lsp_config.cmake.setup{
