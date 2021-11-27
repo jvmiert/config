@@ -207,5 +207,7 @@ lsp_config.pyright.setup{
   root_dir = lsp_config.util.root_pattern(".git", "setup.py",  "setup.cfg", "pyproject.toml", "requirements.txt")
 }
 
-lsp_config.clangd.setup{}
+lsp_config.clangd.setup{
+  on_attach = on_attach,
+}
 EOF
