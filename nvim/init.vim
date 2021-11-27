@@ -1,5 +1,6 @@
 call plug#begin('~/AppData/Local/nvim/plugged')
 
+Plug 'rstacruz/vim-closer'
 Plug 'Luxed/ayu-vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'preservim/nerdtree'
@@ -72,6 +73,10 @@ au BufRead,BufNewFile *.make set syntax=make
 :let g:NERDTreeWinSize=45
 
 lua << EOF
+require('telescope').setup{ defaults = { file_ignore_patterns = {
+  "node_modules", "yarn.lock", "chunk.js", "chunk.js.map", "requirements.txt"
+}}}
+
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   ignore_install = {}, -- List of parsers to ignore installing
@@ -200,5 +205,17 @@ lsp_config.cmake.setup{
 lsp_config.pyright.setup{
   on_attach = on_attach,
   root_dir = lsp_config.util.root_pattern(".git", "setup.py",  "setup.cfg", "pyproject.toml", "requirements.txt")
+}
+
+lsp_config.ccls.setup {
+  init_options = {
+    compilationDatabaseDirectory = "build";
+    index = {
+      threads = 0;
+    };
+    clang = {
+      excludeArgs = { "-frounding-math"} ;
+    };
+  }
 }
 EOF
