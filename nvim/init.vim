@@ -207,15 +207,5 @@ lsp_config.pyright.setup{
   root_dir = lsp_config.util.root_pattern(".git", "setup.py",  "setup.cfg", "pyproject.toml", "requirements.txt")
 }
 
-lsp_config.ccls.setup {
-  init_options = {
-    compilationDatabaseDirectory = "build";
-    index = {
-      threads = 0;
-    };
-    clang = {
-      excludeArgs = { "-frounding-math"} ;
-    };
-  }
-}
+lsp_config.clangd.setup{}
 EOF
