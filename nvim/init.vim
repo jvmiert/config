@@ -71,6 +71,7 @@ autocmd BufWritePre * :%s/\s\+$//e
 au BufRead,BufNewFile *.make set syntax=make
 
 :let g:NERDTreeWinSize=45
+:let g:NERDTreeQuitOnOpen=1
 
 lua << EOF
 require('telescope').setup{ defaults = { file_ignore_patterns = {
