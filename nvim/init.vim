@@ -154,7 +154,7 @@ local eslint = {
     formatCommand = "eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}",
     formatStdin = true
 }
-local prettier = { formatCommand = 'prettierd --stdin-filepath ${INPUT}', formatStdin = true }
+local prettier = { formatCommand = 'prettierd ${INPUT}', formatStdin = true }
 local flake8 = {
   lintCommand = 'flake8 --stdin-display-name ${INPUT} -',
   lintStdin = true,
