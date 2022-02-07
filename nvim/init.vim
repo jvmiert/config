@@ -38,7 +38,7 @@ set colorcolumn=80
 set hidden
 set laststatus=2
 set ruler
-set scrolloff=999
+set scrolloff=5
 set showmatch
 set showmode
 set splitbelow
