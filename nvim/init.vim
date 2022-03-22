@@ -62,6 +62,7 @@ map <C-]> :tabnext<CR>
 nnoremap <leader>nn :NERDTreeToggle<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
 
 nmap <leader>cd :cd %:h<CR>
 nmap <leader>lcd :lcd %:h<CR>
@@ -102,6 +103,16 @@ require'nvim-treesitter.configs'.setup {
   indent = {
     enable = true,
   },
+}
+
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.proto = {
+  install_info = {
+    url = "https://github.com/mitchellh/tree-sitter-proto", -- local path or git repo
+    files = {"src/parser.c"},
+    branch = "main",
+  },
+  filetype = "proto", -- if filetype does not agrees with parser name
 }
 
 local lsp_config = require('lspconfig')
