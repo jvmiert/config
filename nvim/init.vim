@@ -1,7 +1,7 @@
 call plug#begin('~/AppData/Local/nvim/plugged')
 
 Plug 'rstacruz/vim-closer'
-Plug 'Luxed/ayu-vim'
+Plug 'ayu-theme/ayu-vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'preservim/nerdtree'
 Plug 'nvim-lua/plenary.nvim'
@@ -50,7 +50,7 @@ set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 
-let g:ayucolor="mirage"
+let ayucolor="mirage"
 colorscheme ayu
 
 map <C-t> :tabnew<CR>
@@ -97,7 +97,6 @@ require'nvim-treesitter.configs'.setup {
   },
   rainbow = {
     enable = true,
-    colors = require('ayu').rainbow_colors
   },
   indent = {
     enable = true,
@@ -240,3 +239,5 @@ end
 EOF
 
 autocmd BufWritePre *.go lua OrgImports(1000)
+
+highlight Search ctermbg=yellow ctermfg=black guibg=yellow guifg=black
