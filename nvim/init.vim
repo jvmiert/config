@@ -11,7 +11,6 @@ Plug 'neovim/nvim-lspconfig'
 call plug#end()
 
 let mapleader=";"
-set guifont=Inconsolata\ for\ Powerline:h11
 
 set relativenumber
 set number
