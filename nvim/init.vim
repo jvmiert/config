@@ -58,7 +58,7 @@ map <C-c> :tabclose<CR>
 map <C-[> :tabprevious<CR>
 map <C-]> :tabnext<CR>
 
-nnoremap <leader>nn :NERDTreeToggle<CR>
+nnoremap <leader>nn :NERDTreeMirror<CR>:NERDTreeFocus<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
@@ -67,6 +67,9 @@ nmap <leader>cd :cd %:h<CR>
 nmap <leader>lcd :lcd %:h<CR>
 
 autocmd BufWritePre * :%s/\s\+$//e
+
+autocmd VimEnter * NERDTree
+
 
 au BufRead,BufNewFile *.make set syntax=make
 
