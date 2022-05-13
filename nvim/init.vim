@@ -169,7 +169,7 @@ local eslint = {
 }
 local prettier = { formatCommand = 'prettierd ${INPUT}', formatStdin = true }
 local flake8 = {
-  lintCommand = 'flake8 --stdin-display-name ${INPUT} -',
+  lintCommand = 'flake8 --ignore=E111 --stdin-display-name ${INPUT} -',
   lintStdin = true,
   lintIgnoreExitCode = true,
   lintFormats = {'%f:%l:%c: %m'},
