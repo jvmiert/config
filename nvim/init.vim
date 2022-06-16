@@ -67,8 +67,8 @@ nmap <leader>lcd :lcd %:h<CR>
 
 autocmd BufWritePre * :%s/\s\+$//e
 
-autocmd VimEnter * NERDTree
-
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 
 au BufRead,BufNewFile *.make set syntax=make
 
@@ -77,6 +77,85 @@ au BufRead,BufNewFile *.make set syntax=make
 :let g:NERDTreeShowHidden=1
 
 lua << EOF
+-- Polyfill `vim.lsp.buf.format` from neovim 0.8
+--
+-- START COPYPASTA https://github.com/neovim/neovim/commit/5b04e46d23b65413d934d812d61d8720b815eb1c
+local util = require 'vim.lsp.util'
+--- Formats a buffer using the attached (and optionally filtered) language
+--- server clients.
+---
+--- @param options table|nil Optional table which holds the following optional fields:
+---     - formatting_options (table|nil):
+---         Can be used to specify FormattingOptions. Some unspecified options will be
+---         automatically derived from the current Neovim options.
+---         @see https://microsoft.github.io/language-server-protocol/specification#textDocument_formatting
+---     - timeout_ms (integer|nil, default 1000):
+---         Time in milliseconds to block for formatting requests. Formatting requests are current
+---         synchronous to prevent editing of the buffer.
+---     - bufnr (number|nil):
+---         Restrict formatting to the clients attached to the given buffer, defaults to the current
+---         buffer (0).
+---     - filter (function|nil):
+---         Predicate used to filter clients. Receives a client as argument and must return a
+---         boolean. Clients matching the predicate are included. Example:
+---
+---         <pre>
+---         -- Never request typescript-language-server for formatting
+---         vim.lsp.buf.format {
+---           filter = function(client) return client.name ~= "tsserver" end
+---         }
+---         </pre>
+---
+---     - id (number|nil):
+---         Restrict formatting to the client with ID (client.id) matching this field.
+---     - name (string|nil):
+---         Restrict formatting to the client with name (client.name) matching this field.
+vim.lsp.buf.format = vim.lsp.buf.format or function(options)
+  options = options or {}
+  local bufnr = options.bufnr or vim.api.nvim_get_current_buf()
+  local clients = vim.lsp.get_active_clients({
+    id = options.id,
+    bufnr = bufnr,
+    name = options.name,
+  })
+
+  if options.filter then
+    clients = vim.tbl_filter(options.filter, clients)
+  elseif options.id then
+    clients = vim.tbl_filter(
+      function(client) return client.id == options.id end,
+      clients
+    )
+  elseif options.name then
+    clients = vim.tbl_filter(
+      function(client) return client.name == options.name end,
+      clients
+    )
+  end
+
+  clients = vim.tbl_filter(
+    function(client) return client.supports_method 'textDocument/formatting' end,
+    clients
+  )
+
+  if #clients == 0 then
+    vim.notify '[LSP] Format request failed, no matching language servers.'
+  end
+
+  local timeout_ms = options.timeout_ms or 1000
+  for _, client in pairs(clients) do
+    local params = util.make_formatting_params(options.formatting_options)
+    local result, err = client.request_sync('textDocument/formatting', params, timeout_ms, bufnr)
+    if result and result.result then
+      util.apply_text_edits(result.result, bufnr, client.offset_encoding)
+    elseif err then
+      vim.notify(string.format('[LSP][%s] %s', client.name, err), vim.log.levels.WARN)
+    end
+  end
+end
+-- END COPYPASTA
+
+
 require('telescope').setup{ defaults = { file_ignore_patterns = {
   "node_modules", "yarn.lock", "chunk.js", "chunk.js.map", "requirements.txt"
 }}}
@@ -147,20 +226,6 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
-
-  if client.name ~= 'efm' then
-    client.resolved_capabilities.document_formatting = false
-  end
-
-  if client.resolved_capabilities.document_formatting then
-    vim.cmd [[
-        augroup Format
-          au! * <buffer>
-          au BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync(nil, 2000)
-        augroup END
-      ]]
-  end
-
 end
 
 local eslint = {
@@ -193,14 +258,32 @@ local efm_languages = {
 
 lsp_config.efm.setup{
     filetypes = vim.tbl_keys(efm_languages),
-    on_attach = on_attach,
+    on_attach = function(client, bufnr)
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        group = vim.api.nvim_create_augroup('LspFormatting', { clear = true }),
+        pattern = '*',
+        callback = function()
+          vim.lsp.buf.format {
+            timeout_ms = 2000,
+          }
+        end
+      })
+      on_attach(client, bufnr)
+    end,
     root_dir = lsp_config.util.root_pattern('package.json', 'requirements.txt'),
     init_options = {documentFormatting = true},
     settings = {rootMarkers = efm_root_markers, languages = efm_languages}
 }
 
 lsp_config.tsserver.setup{
-  on_attach = on_attach,
+    on_attach = function(client, bufnr)
+      on_attach(client, bufnr)
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider  = false
+      client.server_capabilities.document_formatting = false
+      client.server_capabilities.documentFormattingProvider = false
+      client.resolved_capabilities.document_formatting = false
+    end,
 }
 
 lsp_config.gopls.setup{
