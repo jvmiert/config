@@ -113,7 +113,7 @@ local diagnostics = null_ls.builtins.diagnostics
 null_ls.setup({
   debug = false,
     sources = {
-      formatting.prettier_d_slim,
+      formatting.prettierd,
       diagnostics.eslint_d,
       formatting.gofmt,
       formatting.goimports,

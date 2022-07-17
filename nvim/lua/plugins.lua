@@ -48,12 +48,17 @@ return packer.startup(function(use)
   use({ "lewis6991/impatient.nvim" })
   use({ "nvim-lua/plenary.nvim" })
   use({ "lukas-reineke/indent-blankline.nvim" })
+  use({'akinsho/bufferline.nvim' })
 
   use({ "preservim/nerdtree" })
   use({ "nvim-telescope/telescope.nvim" })
 
   -- Colorschemes
   use({ "Shatur/neovim-ayu" })
+  use({ "sonph/onehalf", rtp = 'vim' })
+  use({ "morhetz/gruvbox" })
+  use({ "EdenEast/nightfox.nvim" })
+  use({ "rebelot/kanagawa.nvim" })
 
   -- LSP
   use({ "neovim/nvim-lspconfig" }) -- enable LSP

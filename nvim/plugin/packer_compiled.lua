@@ -74,6 +74,16 @@ _G.packer_plugins = {
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\Comment.nvim",
     url = "https://github.com/numToStr/Comment.nvim"
   },
+  ["bufferline.nvim"] = {
+    loaded = true,
+    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\bufferline.nvim",
+    url = "https://github.com/akinsho/bufferline.nvim"
+  },
+  gruvbox = {
+    loaded = true,
+    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\gruvbox",
+    url = "https://github.com/morhetz/gruvbox"
+  },
   ["impatient.nvim"] = {
     loaded = true,
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\impatient.nvim",
@@ -84,6 +94,11 @@ _G.packer_plugins = {
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\indent-blankline.nvim",
     url = "https://github.com/lukas-reineke/indent-blankline.nvim"
   },
+  ["kanagawa.nvim"] = {
+    loaded = true,
+    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\kanagawa.nvim",
+    url = "https://github.com/rebelot/kanagawa.nvim"
+  },
   ["neovim-ayu"] = {
     loaded = true,
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\neovim-ayu",
@@ -93,6 +108,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nerdtree",
     url = "https://github.com/preservim/nerdtree"
+  },
+  ["nightfox.nvim"] = {
+    loaded = true,
+    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nightfox.nvim",
+    url = "https://github.com/EdenEast/nightfox.nvim"
   },
   ["null-ls.nvim"] = {
     loaded = true,
@@ -124,6 +144,11 @@ _G.packer_plugins = {
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nvim-ts-context-commentstring",
     url = "https://github.com/JoosepAlviste/nvim-ts-context-commentstring"
   },
+  onehalf = {
+    loaded = true,
+    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\onehalf\\vim",
+    url = "https://github.com/sonph/onehalf"
+  },
   ["packer.nvim"] = {
     loaded = true,
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\packer.nvim",
@@ -142,6 +167,10 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
+-- Runtimepath customization
+time([[Runtimepath customization]], true)
+vim.o.runtimepath = vim.o.runtimepath .. ",C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\onehalf\\vim"
+time([[Runtimepath customization]], false)
 if should_profile then save_profiles() end
 
 end)
