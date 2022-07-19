@@ -207,6 +207,31 @@ local status_ok, bufferline = pcall(require, "bufferline")
 if not status_ok then
   return
 end
+
+function mysplit(inputstr, sep)
+  if sep == nil then
+    sep = "%s"
+  end
+
+  local t={}
+  for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+    table.insert(t, str)
+  end
+    return t[#t]
+end
+
+
+local function getParentPath(path)
+  pattern1 = "^(.+)//"
+  pattern2 = "^(.+)\\"
+
+  if (string.match(path,pattern1) == nil) then
+    return mysplit(string.match(path,pattern2), "\\")
+  else
+    return mysplit(string.match(path,pattern1), "//")
+  end
+end
+
 bufferline.setup {
   options = {
     mode = "tabs", -- set to "tabs" to only show tabpages instead
@@ -217,9 +242,9 @@ bufferline.setup {
     close_icon = '',
     left_trunc_marker = '',
     right_trunc_marker = '',
-    max_name_length = 25,
+    max_name_length = 100,
     max_prefix_length = 18, -- prefix used when a buffer is de-duplicated
-    tab_size = 18,
+    tab_size = 20,
     diagnostics = false,
     diagnostics_update_in_insert = false,
     color_icons = false, -- whether or not to add the filetype icon highlights
@@ -229,6 +254,25 @@ bufferline.setup {
     show_close_icon = false,
     show_tab_indicators = false,
     separator_style = "thin",
+    enforce_regular_tabs = false,
+    name_formatter = function(tab)  -- tab contains a "name", "path" and "tabnr"
+      if (tab.path == "") then
+        return ""
+      end
+      return string.format("%s/%s", getParentPath(tab.path), tab.name)
+    end,
+    custom_filter = function(buf_number, buf_numbers)
+      -- don't switch buffer names for these tools
+      if
+        vim.bo[buf_number].filetype ~= 'nerdtree'
+        and vim.bo[buf_number].filetype ~= 'TelescopePrompt'
+        and vim.bo[buf_number].filetype ~= 'packer'
+      then
+        return true
+      else
+        return false
+      end
+    end,
   }
 }
 vim.api.nvim_set_keymap("n", "<leader>gb", ":BufferLinePick<CR>", {noremap = true})
