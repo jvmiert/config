@@ -39,7 +39,7 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
 end
 
-local servers = { "cmake", "pyright", "clangd", "gopls", "tsserver", "tailwindcss"}
+local servers = { "cmake", "pyright", "clangd", "gopls", "tsserver", "tailwindcss", "rust_analyzer"}
 
 lsp_installer.setup({
   automatic_installation = true,
@@ -81,12 +81,17 @@ lsp_config.pyright.setup{
 
 
 -- clangd
+lsp_config.rust_analyzer.setup{
+  on_attach = on_attach,
+}
+
+-- rust
 lsp_config.clangd.setup{
   on_attach = on_attach,
 }
 
 
--- clangd
+-- typescript
 lsp_config.tsserver.setup{
     on_attach = function(client, bufnr)
       on_attach(client, bufnr)

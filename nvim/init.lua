@@ -22,6 +22,7 @@ vim.api.nvim_set_keymap("n", "<leader>nf", ":NERDTreeFind<CR>", {noremap = true}
 vim.api.nvim_set_keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", {noremap = true})
 vim.api.nvim_set_keymap("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", {noremap = true})
 vim.api.nvim_set_keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", {noremap = true})
+vim.api.nvim_set_keymap("n", "<leader>fr", "<cmd>Telescope registers<cr>", {noremap = true})
 
 vim.cmd [[ autocmd BufWritePre * :%s/\s\+$//e ]]  -- Remove trailing whitespace
 vim.cmd [[ au BufRead,BufNewFile *.make set syntax=make ]]
@@ -42,7 +43,7 @@ vim.api.nvim_command('set colorcolumn=80')
 vim.api.nvim_command('set hidden')
 vim.api.nvim_command('set laststatus=2')
 vim.api.nvim_command('set ruler')
-vim.api.nvim_command('set scrolloff=5')
+vim.api.nvim_command('set scrolloff=20')
 vim.api.nvim_command('set sidescrolloff=5')
 vim.api.nvim_command('set showmatch')
 vim.api.nvim_command('set showmode')
@@ -56,12 +57,12 @@ vim.api.nvim_command('set softtabstop=2')
 vim.api.nvim_command('set shiftwidth=2')
 
 vim.opt["smartindent"] = true
-vim.opt["wrap"] = false
+vim.opt["wrap"] = true
 
 
 -- Nerd tree stuff
-vim.cmd [[ autocmd StdinReadPre * let s:std_in=1 ]]
-vim.cmd [[ autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif ]]
+--vim.cmd [[ autocmd StdinReadPre * let s:std_in=1 ]]
+--vim.cmd [[ autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif ]]
 vim.cmd [[ :let g:NERDTreeWinSize=45 ]]
 vim.cmd [[ :let g:NERDTreeQuitOnOpen=1 ]]
 vim.cmd [[ :let g:NERDTreeShowHidden=1 ]]
@@ -236,7 +237,8 @@ bufferline.setup {
   options = {
     mode = "tabs", -- set to "tabs" to only show tabpages instead
     numbers = "ordinal",
-    indicator_icon = '',
+    --indicator_icon = '',
+    indicator = { style = "icon", icon = "" },
     buffer_close_icon = '',
     modified_icon = '',
     close_icon = '',

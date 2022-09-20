@@ -51,7 +51,10 @@ return packer.startup(function(use)
   use({'akinsho/bufferline.nvim' })
 
   use({ "preservim/nerdtree" })
-  use({ "nvim-telescope/telescope.nvim" })
+  use {
+    'nvim-telescope/telescope.nvim', branch = 'master',
+    requires = { {'nvim-lua/plenary.nvim'} }
+  }
 
   -- Colorschemes
   use({ "Shatur/neovim-ayu" })
