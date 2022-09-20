@@ -61,8 +61,8 @@ vim.opt["wrap"] = true
 
 
 -- Nerd tree stuff
---vim.cmd [[ autocmd StdinReadPre * let s:std_in=1 ]]
---vim.cmd [[ autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif ]]
+vim.cmd [[ autocmd StdinReadPre * let s:std_in=1 ]]
+vim.cmd [[ autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif ]]
 vim.cmd [[ :let g:NERDTreeWinSize=45 ]]
 vim.cmd [[ :let g:NERDTreeQuitOnOpen=1 ]]
 vim.cmd [[ :let g:NERDTreeShowHidden=1 ]]
