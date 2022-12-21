@@ -1,7 +1,10 @@
-local status_ok, lsp_installer = pcall(require, "nvim-lsp-installer")
-if not status_ok then
-  return
-end
+local servers = { "cmake", "pyright", "clangd", "gopls", "tsserver", "tailwindcss", "rust_analyzer"}
+
+require("mason").setup()
+require("mason-lspconfig").setup({
+  ensure_installed = servers,
+  automatic_installation = true
+})
 
 local lspconfig = require("lspconfig")
 local util = require("lspconfig/util")
@@ -38,13 +41,6 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
 end
-
-local servers = { "cmake", "pyright", "clangd", "gopls", "tsserver", "tailwindcss", "rust_analyzer"}
-
-lsp_installer.setup({
-  automatic_installation = true,
-  ensure_installed = servers,
-})
 
 
 -- gopls
@@ -131,7 +127,13 @@ null_ls.setup({
               group = augroup,
               buffer = bufnr,
               callback = function()
-                  vim.lsp.buf.format({ bufnr = bufnr, timeout_ms = 2000 })
+                  vim.lsp.buf.format({
+                    bufnr = bufnr,
+                    filter = function(client)
+                      return client.name == "null-ls"
+                    end,
+                    timeout_ms = 2000
+                  })
               end,
           })
       end

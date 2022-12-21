@@ -84,15 +84,10 @@ _G.packer_plugins = {
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\bufferline.nvim",
     url = "https://github.com/akinsho/bufferline.nvim"
   },
-  gruvbox = {
+  ["gruvbox.nvim"] = {
     loaded = true,
-    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\gruvbox",
-    url = "https://github.com/morhetz/gruvbox"
-  },
-  ["impatient.nvim"] = {
-    loaded = true,
-    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\impatient.nvim",
-    url = "https://github.com/lewis6991/impatient.nvim"
+    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\gruvbox.nvim",
+    url = "https://github.com/ellisonleao/gruvbox.nvim"
   },
   ["indent-blankline.nvim"] = {
     loaded = true,
@@ -103,6 +98,21 @@ _G.packer_plugins = {
     loaded = true,
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\kanagawa.nvim",
     url = "https://github.com/rebelot/kanagawa.nvim"
+  },
+  ["lsp_lines.nvim"] = {
+    loaded = true,
+    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\lsp_lines.nvim",
+    url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
+  },
+  ["mason-lspconfig.nvim"] = {
+    loaded = true,
+    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\mason-lspconfig.nvim",
+    url = "https://github.com/williamboman/mason-lspconfig.nvim"
+  },
+  ["mason.nvim"] = {
+    loaded = true,
+    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\mason.nvim",
+    url = "https://github.com/williamboman/mason.nvim"
   },
   ["neovim-ayu"] = {
     loaded = true,
@@ -128,11 +138,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nvim-autopairs",
     url = "https://github.com/windwp/nvim-autopairs"
-  },
-  ["nvim-lsp-installer"] = {
-    loaded = true,
-    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nvim-lsp-installer",
-    url = "https://github.com/williamboman/nvim-lsp-installer"
   },
   ["nvim-lspconfig"] = {
     loaded = true,

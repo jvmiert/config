@@ -1,2 +1,2 @@
-execute "GuiFont! Inconsolata:h11"
+execute "GuiFont! InconsolataGo\ NFM:h11"
 set linespace=1

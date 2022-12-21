@@ -120,16 +120,6 @@ comment.setup {
   end,
 }
 
-
--- Setup impatient
-local status_ok, impatient = pcall(require, "impatient")
-if not status_ok then
-  return
-end
-
-impatient.enable_profile()
-
-
 -- Setup telescope
 require('telescope').setup{ defaults = { file_ignore_patterns = {
   "node_modules", "yarn.lock", "chunk.js", "chunk.js.map", "requirements.txt"
@@ -157,9 +147,6 @@ configs.setup({
         scope_incremental = "grc",
         node_decremental = "grm",
       },
-    },
-    rainbow = {
-      enable = true,
     },
     indent = {
       enable = true,
@@ -261,6 +248,11 @@ bufferline.setup {
       if (tab.path == "") then
         return ""
       end
+
+      if (tab.name == "[No Name]") then
+        return ""
+      end
+
       return string.format("%s/%s", getParentPath(tab.path), tab.name)
     end,
     custom_filter = function(buf_number, buf_numbers)
@@ -278,3 +270,17 @@ bufferline.setup {
   }
 }
 vim.api.nvim_set_keymap("n", "<leader>gb", ":BufferLinePick<CR>", {noremap = true})
+
+
+-- Setup bufferline
+local status_ok, lsp_lines = pcall(require, "lsp_lines")
+if not status_ok then
+  return
+end
+
+-- Not sure I like this...
+--[[ lsp_lines.setup() ]]
+--[[ vim.diagnostic.config({ ]]
+--[[   virtual_lines = { only_current_line = true }, ]]
+--[[   severity_sort = true, ]]
+--[[ }) ]]

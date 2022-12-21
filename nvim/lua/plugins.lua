@@ -45,10 +45,10 @@ return packer.startup(function(use)
   use({ "windwp/nvim-autopairs" }) -- Autopairs, integrates with both cmp and treesitter
   use({ "numToStr/Comment.nvim" })
   use({ "JoosepAlviste/nvim-ts-context-commentstring" })
-  use({ "lewis6991/impatient.nvim" })
   use({ "nvim-lua/plenary.nvim" })
   use({ "lukas-reineke/indent-blankline.nvim" })
-  use({'akinsho/bufferline.nvim' })
+  use({ 'akinsho/bufferline.nvim' })
+  use({ "https://git.sr.ht/~whynothugo/lsp_lines.nvim", as = "lsp_lines.nvim" })
 
   use({ "preservim/nerdtree" })
   use {
@@ -59,13 +59,16 @@ return packer.startup(function(use)
   -- Colorschemes
   use({ "Shatur/neovim-ayu" })
   use({ "sonph/onehalf", rtp = 'vim' })
-  use({ "morhetz/gruvbox" })
+  use({ "ellisonleao/gruvbox.nvim" })
   use({ "EdenEast/nightfox.nvim" })
   use({ "rebelot/kanagawa.nvim" })
 
   -- LSP
-  use({ "neovim/nvim-lspconfig" }) -- enable LSP
-  use({ "williamboman/nvim-lsp-installer" }) -- simple to use language server installer
+  use {
+    "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim",
+    "neovim/nvim-lspconfig",
+  }
   use({ "jose-elias-alvarez/null-ls.nvim" }) -- for formatters and linters
 
   -- Treesitter
