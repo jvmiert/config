@@ -56,6 +56,8 @@ return packer.startup(function(use)
     requires = { {'nvim-lua/plenary.nvim'} }
   }
 
+  use({"gennaro-tedesco/nvim-peekup"})
+
   -- Colorschemes
   use({ "Shatur/neovim-ayu" })
   use({ "sonph/onehalf", rtp = 'vim' })

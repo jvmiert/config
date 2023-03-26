@@ -9,7 +9,32 @@ require('ayu').setup({
 })
 
 -- vim.cmd [[colorscheme ayu-mirage]]
-vim.cmd [[colorscheme nightfox]]
+-- vim.cmd [[colorscheme nightfox]]
+--
+require("gruvbox").setup({
+  undercurl = true,
+  underline = true,
+  bold = true,
+  italic = {
+    strings = false,
+    comments = false,
+    operators = false,
+    folds = false,
+  },
+  strikethrough = true,
+  invert_selection = false,
+  invert_signs = false,
+  invert_tabline = false,
+  invert_intend_guides = false,
+  inverse = true, -- invert background for search, diffs, statuslines and errors
+  contrast = "", -- can be "hard", "soft" or empty string
+  palette_overrides = {},
+  overrides = {},
+  dim_inactive = false,
+  transparent_mode = false,
+})
+vim.o.background = "dark" -- or "light" for light mode
+vim.cmd([[colorscheme gruvbox]])
 
 
 -- General
@@ -189,6 +214,13 @@ indent_blankline.setup({
   show_current_context = true,
 })
 
+-- Setup nvim-peekup
+local status_ok, peekup = pcall(require, "nvim-peekup.config")
+if not status_ok then
+  return
+end
+
+peekup.on_keystroke["delay"] = '50ms'
 
 -- Setup bufferline
 local status_ok, bufferline = pcall(require, "bufferline")
