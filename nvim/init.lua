@@ -49,6 +49,8 @@ vim.api.nvim_set_keymap("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", {nore
 vim.api.nvim_set_keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", {noremap = true})
 vim.api.nvim_set_keymap("n", "<leader>fr", "<cmd>Telescope registers<cr>", {noremap = true})
 
+vim.api.nvim_set_keymap("n", "<leader>U", ":UndotreeToggle<CR>", {noremap = true})
+
 vim.cmd [[ autocmd BufWritePre * :%s/\s\+$//e ]]  -- Remove trailing whitespace
 vim.cmd [[ au BufRead,BufNewFile *.make set syntax=make ]]
 
@@ -56,7 +58,8 @@ vim.wo.number = true
 vim.api.nvim_command('set mouse=a')
 vim.api.nvim_command('set undofile')
 vim.api.nvim_command('set clipboard+=unnamedplus')
-vim.api.nvim_command('set hlsearch')
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
 vim.api.nvim_command('set ignorecase')
 vim.api.nvim_command('set incsearch')
 vim.api.nvim_command('set smartcase')
@@ -68,7 +71,7 @@ vim.api.nvim_command('set colorcolumn=80')
 vim.api.nvim_command('set hidden')
 vim.api.nvim_command('set laststatus=2')
 vim.api.nvim_command('set ruler')
-vim.api.nvim_command('set scrolloff=20')
+vim.api.nvim_command('set scrolloff=8')
 vim.api.nvim_command('set sidescrolloff=5')
 vim.api.nvim_command('set showmatch')
 vim.api.nvim_command('set showmode')
@@ -80,6 +83,13 @@ vim.api.nvim_command('set expandtab')
 vim.api.nvim_command('set tabstop=2')
 vim.api.nvim_command('set softtabstop=2')
 vim.api.nvim_command('set shiftwidth=2')
+vim.api.nvim_command('set relativenumber')
+vim.opt.updatetime = 50
+
+vim.keymap.set("x", "<leader>p", [["_dP]])
+vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
+vim.keymap.set("n", "<leader>Y", [["+Y]])
+
 
 vim.opt["smartindent"] = true
 vim.opt["wrap"] = true
@@ -316,3 +326,7 @@ end
 --[[   virtual_lines = { only_current_line = true }, ]]
 --[[   severity_sort = true, ]]
 --[[ }) ]]
+
+require'treesitter-context'.setup{
+  enable = true,
+}

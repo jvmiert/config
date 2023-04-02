@@ -50,6 +50,8 @@ return packer.startup(function(use)
   use({ 'akinsho/bufferline.nvim' })
   use({ "https://git.sr.ht/~whynothugo/lsp_lines.nvim", as = "lsp_lines.nvim" })
 
+  use({'mbbill/undotree'})
+
   use({ "preservim/nerdtree" })
   use {
     'nvim-telescope/telescope.nvim', branch = 'master',
@@ -75,6 +77,9 @@ return packer.startup(function(use)
 
   -- Treesitter
   use({ "nvim-treesitter/nvim-treesitter" })
+  use({'nvim-treesitter/nvim-treesitter-context',
+    requires = { {'nvim-lua/plenary.nvim'} }}
+  )
 
 
   -- Automatically set up your configuration after cloning packer.nvim
