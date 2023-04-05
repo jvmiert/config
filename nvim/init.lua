@@ -224,14 +224,6 @@ indent_blankline.setup({
   show_current_context = true,
 })
 
--- Setup nvim-peekup
-local status_ok, peekup = pcall(require, "nvim-peekup.config")
-if not status_ok then
-  return
-end
-
-peekup.on_keystroke["delay"] = '50ms'
-
 -- Setup bufferline
 local status_ok, bufferline = pcall(require, "bufferline")
 if not status_ok then
@@ -313,19 +305,6 @@ bufferline.setup {
 }
 vim.api.nvim_set_keymap("n", "<leader>gb", ":BufferLinePick<CR>", {noremap = true})
 
-
--- Setup bufferline
-local status_ok, lsp_lines = pcall(require, "lsp_lines")
-if not status_ok then
-  return
-end
-
--- Not sure I like this...
---[[ lsp_lines.setup() ]]
---[[ vim.diagnostic.config({ ]]
---[[   virtual_lines = { only_current_line = true }, ]]
---[[   severity_sort = true, ]]
---[[ }) ]]
 
 require'treesitter-context'.setup{
   enable = true,

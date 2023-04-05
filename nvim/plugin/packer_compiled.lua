@@ -99,11 +99,6 @@ _G.packer_plugins = {
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\kanagawa.nvim",
     url = "https://github.com/rebelot/kanagawa.nvim"
   },
-  ["lsp_lines.nvim"] = {
-    loaded = true,
-    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\lsp_lines.nvim",
-    url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
-  },
   ["mason-lspconfig.nvim"] = {
     loaded = true,
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\mason-lspconfig.nvim",
@@ -143,11 +138,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nvim-lspconfig",
     url = "https://github.com/neovim/nvim-lspconfig"
-  },
-  ["nvim-peekup"] = {
-    loaded = true,
-    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nvim-peekup",
-    url = "https://github.com/gennaro-tedesco/nvim-peekup"
   },
   ["nvim-treesitter"] = {
     loaded = true,

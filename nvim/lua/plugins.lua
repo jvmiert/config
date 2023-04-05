@@ -48,7 +48,6 @@ return packer.startup(function(use)
   use({ "nvim-lua/plenary.nvim" })
   use({ "lukas-reineke/indent-blankline.nvim" })
   use({ 'akinsho/bufferline.nvim' })
-  use({ "https://git.sr.ht/~whynothugo/lsp_lines.nvim", as = "lsp_lines.nvim" })
 
   use({'mbbill/undotree'})
 
@@ -57,8 +56,6 @@ return packer.startup(function(use)
     'nvim-telescope/telescope.nvim', branch = 'master',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
-
-  use({"gennaro-tedesco/nvim-peekup"})
 
   -- Colorschemes
   use({ "Shatur/neovim-ayu" })
