@@ -85,6 +85,7 @@ vim.api.nvim_command('set softtabstop=2')
 vim.api.nvim_command('set shiftwidth=2')
 vim.api.nvim_command('set relativenumber')
 vim.opt.updatetime = 50
+vim.wo.colorcolumn = ""
 
 vim.keymap.set("x", "<leader>p", [["_dP]])
 vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
@@ -217,9 +218,6 @@ vim.g.indent_blankline_show_first_indent_level = true
 vim.g.indent_blankline_use_treesitter = true
 vim.g.indent_blankline_show_current_context = true
 
--- HACK: work-around for https://github.com/lukas-reineke/indent-blankline.nvim/issues/59
-vim.wo.colorcolumn = "99999"
-
 indent_blankline.setup({
   show_current_context = true,
 })
@@ -305,7 +303,7 @@ bufferline.setup {
 }
 vim.api.nvim_set_keymap("n", "<leader>gb", ":BufferLinePick<CR>", {noremap = true})
 
-
+--[[ my pc can't handle this :( ]]
 require'treesitter-context'.setup{
-  enable = true,
+  enable = false,
 }
