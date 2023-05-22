@@ -78,13 +78,25 @@ lsp_config.pyright.setup{
 }
 
 
--- clangd
+-- rust
 lsp_config.rust_analyzer.setup{
   on_attach = on_attach,
 }
 
--- rust
+-- clangd
 lsp_config.clangd.setup{
+  on_attach = on_attach,
+  filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
+}
+
+-- proto
+lsp_config.bufls.setup{
+  cmd = { "bufls", "serve" },
+  on_attach = on_attach,
+}
+
+-- zig
+lsp_config.zls.setup{
   on_attach = on_attach,
 }
 
@@ -118,9 +130,11 @@ null_ls.setup({
     sources = {
       formatting.prettierd,
       diagnostics.eslint_d,
+      --[[ formatting.goimports, ]]
+      formatting.buf,
       formatting.gofmt,
-      formatting.goimports,
       diagnostics.flake8,
+      diagnostics.buf,
   },
   on_attach = function(client, bufnr)
       if client.supports_method("textDocument/formatting") then
@@ -129,13 +143,12 @@ null_ls.setup({
               group = augroup,
               buffer = bufnr,
               callback = function()
-                  vim.lsp.buf.format({
-                    bufnr = bufnr,
-                    filter = function(client)
-                      return client.name == "null-ls"
-                    end,
-                    timeout_ms = 2000
-                  })
+                vim.lsp.buf.format({
+                  bufnr = bufnr,
+                  filter = function(client)
+                    return client.name == "null-ls"
+                  end
+              })
               end,
           })
       end
