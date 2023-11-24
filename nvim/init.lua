@@ -168,9 +168,12 @@ if not status_ok then
     return
 end
 
+require 'nvim-treesitter.install'.compilers = { 'zig' }
+
 configs.setup({
   ensure_installed = "all", -- one of "all" or a list of languages
-  ignore_install = { "phpdoc" }, -- List of parsers to ignore installing
+  sync_install = true,
+  ignore_install = { "phpdoc", "agda", "htmldjango" }, -- List of parsers to ignore installing
     highlight = {
       enable = true,
       additional_vim_regex_highlighting = false,

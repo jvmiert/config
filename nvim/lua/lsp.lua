@@ -90,10 +90,10 @@ lsp_config.clangd.setup{
 }
 
 -- proto
-lsp_config.bufls.setup{
-  cmd = { "bufls", "serve" },
-  on_attach = on_attach,
-}
+--[[ lsp_config.bufls.setup{ ]]
+--[[   cmd = { "bufls", "serve" }, ]]
+--[[   on_attach = on_attach, ]]
+--[[ } ]]
 
 -- zig
 lsp_config.zls.setup{
