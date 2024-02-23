@@ -47,7 +47,6 @@ return packer.startup(function(use)
   use({ "JoosepAlviste/nvim-ts-context-commentstring" })
   use({ "nvim-lua/plenary.nvim" })
   use({ "lukas-reineke/indent-blankline.nvim" })
-  use({ 'akinsho/bufferline.nvim' })
 
   use({'mbbill/undotree'})
 
@@ -74,9 +73,8 @@ return packer.startup(function(use)
 
   -- Treesitter
   use({ "nvim-treesitter/nvim-treesitter" })
-  use({'nvim-treesitter/nvim-treesitter-context',
-    requires = { {'nvim-lua/plenary.nvim'} }}
-  )
+
+  use {'akinsho/bufferline.nvim', tag = "v4.*", requires = 'nvim-tree/nvim-web-devicons'}
 
 
   -- Automatically set up your configuration after cloning packer.nvim
