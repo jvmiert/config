@@ -74,7 +74,7 @@ return packer.startup(function(use)
   -- Treesitter
   use({ "nvim-treesitter/nvim-treesitter" })
 
-  use {'akinsho/bufferline.nvim', tag = "v4.*", requires = 'nvim-tree/nvim-web-devicons'}
+  use {'akinsho/bufferline.nvim', tag = "v4.*" }
 
 
   -- Automatically set up your configuration after cloning packer.nvim

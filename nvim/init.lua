@@ -46,6 +46,8 @@ vim.cmd([[colorscheme gruvbox]])
 -- General
 vim.g.mapleader =";"
 
+vim.keymap.set({"n", "v"}, "<leader>d", '"_d')
+
 vim.cmd [[ map <C-t> :tabnew<CR> ]]
 
 vim.api.nvim_set_keymap("n", "<leader>nn", ":NERDTreeMirror<CR>:NERDTreeFocus<CR>", {noremap = true})

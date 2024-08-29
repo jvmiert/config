@@ -149,11 +149,6 @@ _G.packer_plugins = {
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nvim-ts-context-commentstring",
     url = "https://github.com/JoosepAlviste/nvim-ts-context-commentstring"
   },
-  ["nvim-web-devicons"] = {
-    loaded = true,
-    path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nvim-web-devicons",
-    url = "https://github.com/nvim-tree/nvim-web-devicons"
-  },
   onehalf = {
     loaded = true,
     path = "C:\\Users\\Jeroen\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\onehalf\\vim",
