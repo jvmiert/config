@@ -90,6 +90,9 @@ vim.api.nvim_command('set shiftwidth=2')
 vim.api.nvim_command('set relativenumber')
 vim.wo.colorcolumn = ""
 
+-- Fix windows issue with paths?
+vim.api.nvim_command('set shellslash')
+
 
 vim.cmd [[ autocmd BufWritePre * :%s/\s\+$//e ]]  -- Remove trailing whitespace
 vim.cmd [[ au BufRead,BufNewFile *.make set syntax=make ]]
