@@ -1,0 +1,153 @@
+ls
+ls -la
+cd ~
+sudo ls -la
+ls /root/
+sudo ls /root/
+sudo ls /root/jeroen-nixos
+sudo cp -a /root/jeroen-nix ~/jeroen-nix
+sudo cp -a /root/jeroen-nixos ~/jeroen-nixos
+ls
+ls -la
+sudo chown -R jeroen:jeroen jeroen-nixos/
+sudo chown -R jeroen:users jeroen-nixos/
+ls -la
+clear
+nvim jeroen-nixos/jeroen-dev.nix
+clear
+ifconfig
+nvim jeroen-nixos/jeroen-dev.nix
+flake 
+nix flake
+nix fmt
+nix fmt jeroen-nixos/
+ls
+cd jeroen-nixos/
+nix fmt .
+nvim flake.nix
+nix fmt .
+nvim flake.nix
+nix fmt .
+nix fmt
+nix fmt ~/jeroen-nixos/
+cat ~/jeroen-nixos/flake.nix
+nix fmt ~/jeroen-nixos/flake.nix
+nix fmt
+nixfmt
+nvim jeroen-nixos/jeroen-dev.nix
+clear
+nvim jeroen-nixos/jeroen-dev.nix
+clear
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+nixfmt
+ls
+cd jeroen-nixos/
+ls
+nixfmt flake.nix
+cat flake.nix
+nixfmt jeroen-dev.nix
+cat jeroen-dev.nix
+nvim jeroen-dev.nix
+nixfmt hardware-configuration.nix
+nvim hardware-configuration.nix
+ls
+exit
+nvim jeroen-dev.nix
+nixfmt jeroen-dev.nix
+nvim jeroen-dev.nix
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+nvim jeroen-nixos/
+nvim jeroen-nixos/jeroen-dev.nix
+exit
+nvim jeroen-nixos/jeroen-dev.nix
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+nvim jeroen-nixos/jeroen-dev.nix
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+nvim jeroen-nixos/jeroen-dev.nix
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+sudo reboot now
+nvim jeroen-nixos/jeroen-dev.nix
+sudo reboot now
+nvim jeroen-nixos/jeroen-dev.nix
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+nvim jeroen-nixos/jeroen-dev.nix
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+nvim jeroen-nixos/jeroen-dev.nix
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+nvim jeroen-nixos/jeroen-dev.nix
+:q
+nvim jeroen-nixos/jeroen-dev.nix
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+nvim jeroen-nixos/jeroen-dev.nix
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+nixfmt jeroen-nixos/
+nixfmt jeroen-nixos/jeroen-dev.nix
+nvim jeroen-nixos/jeroen-dev.nix
+sudo reboot now
+ls -la
+cd .config/
+ls -la
+nvim jeroen-nixos/jeroen-dev.nix
+nvim ~/jeroen-nixos/jeroen-dev.nix
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+nvim ~/jeroen-nixos/jeroen-dev.nix
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+nvim ~/jeroen-nixos/jeroen-dev.nix
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+sudo reboot now
+asdasd
+clear
+cd .config/
+ls
+ls -la
+cd i3/
+ls
+8
+indow visuals
+_float pixel 2
+ing_minimum_size 400 x 300
+g_maximum_size -1 x -1
+focus_follows_mouse no
+rom_resource $black                i3wm.color0             #282A2E
+_from_resource $grey                 i3wm.color8             #373B41
+_from_resource $lightgrey    i3wm.color7             #707880
+ce $white                i3wm.color15    #C5C8C6
+ghostty
+clear
+nvim ~/.config/i3/config
+ifconfig
+nvim ~/.config/i3/config
+ls ~/.config/
+cat ~/.config/nushell/config.nu
+nvim ~/jeroen-nixos/jeroen-dev.nix
+nvim ~/jeroen-nixos/flake.nix
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+nixfmt jeroen-nixos/jeroen-dev.nix
+nixfmt jeroen-nixos/flake.nix
+nvim ~/jeroen-nixos/flake.nix
+version
+nvim ~/.config/nushell/config.nu
+ghostty
+cd ~/.config
+mkdir i3status
+sudo reboot now
+nvim ~/.config/i3/config
+nvim ~/.Xresources
+nvim ~/.config/i3/config
+sudo reboot now
+nvim /home/jeroen/.config/nushell/config.nu
+sudo nvim /home/jeroen/.config/nushell/config.nu
+nvim ~/.config/nushell/config.nu
+history
+clear
+exit
+nvim ~/.config/nushell/config.nu
+cd ~/.config/nushell/
+ls
+ls -la
+nvim ~/jeroen-nixos/home.nix
+sudo nixos-rebuild switch --flake ~/jeroen-nixos/
+ls -la
+mv config.nu.backup config.nu
+cat config.nu
+exit

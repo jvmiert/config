@@ -1,193 +1,154 @@
-require "plugins"
-require "lsp"
+vim.opt.clipboard:append { "unnamed", "unnamedplus" } -- Use system clipboard by default
 
+vim.opt.hlsearch    = true                            -- Highlight matches while searching
+vim.opt.ignorecase  = true                            -- Ignore case while searching, by default
+vim.opt.incsearch   = true                            -- Enable incremental search by default
 
--- Setup color scheme
-require('ayu').setup({
-    mirage = true,
-    overrides = {},
+vim.opt.expandtab   = true                            -- Use spaces by default instead of tabs
+vim.opt.tabstop     = 2                               -- How wide a tab looks when displayed
+vim.opt.shiftwidth  = 2                               -- How many spaces to indent by
+vim.opt.softtabstop = 2                               -- How many spaces to insert when pressing TAB
+vim.opt.smartindent = true                            --
+vim.opt.wrap        = true                            --
+
+vim.opt.signcolumn  = "yes"                           -- Fixed left column width for lsp diag.
+
+vim.opt.number      = true                            -- Enable line numbers
+vim.opt.rnu         = true                            -- Make the line numbers relative
+
+vim.opt.scrolloff   = 8                               --
+
+vim.opt.swapfile    = false                           --
+vim.opt.backup      = false                           --
+vim.opt.undofile    = true                            --
+
+vim.g.mapleader     = ";"                             -- Set ; as the leader key
+
+local augroup       = vim.api.nvim_create_augroup
+local autocmd       = vim.api.nvim_create_autocmd
+local jeroenGroup   = augroup('jeroen', {})
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = augroup('my.lsp', {}),
+  callback = function(args)
+    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+    -- Auto-format ("lint") on save.
+    -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
+    if not client:supports_method('textDocument/willSaveWaitUntil')
+        and client:supports_method('textDocument/formatting') then
+      autocmd('BufWritePre', {
+        group = augroup('my.lsp', { clear = false }),
+        buffer = args.buf,
+        callback = function()
+          vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
+        end,
+      })
+    end
+  end,
 })
 
-if vim.g.neovide then
-  vim.g.neovide_cursor_animation_length = 0.0
-  vim.g.neovide_cursor_trail_size = 0.0
-  vim.g.neovide_scroll_animation_length = 0.1
-  vim.g.neovide_refresh_rate = 144
+autocmd("BufWritePre", {
+  group = jeroenGroup,
+  pattern = "*",
+  command = [[%s/\s\+$//e]],
+})
+
+local hooks = function(ev)
+  -- Use available |event-data|
+  local name, kind = ev.data.spec.name, ev.data.kind
+  -- Run build script after plugin's code has changed
+  if name == 'telescope-fzf-native.nvim' and (kind == 'install' or kind == 'update') then
+    vim.system({ 'make' }, { cwd = ev.data.path })
+  end
 end
 
--- vim.cmd [[colorscheme ayu-mirage]]
--- vim.cmd [[colorscheme nightfox]]
---
+-- If hooks need to run on install, run this before `vim.pack.add()`
+vim.api.nvim_create_autocmd('PackChanged', { callback = hooks })
+
+vim.pack.add({
+  { src = 'https://github.com/nvim-lua/plenary.nvim' },
+  { src = 'https://github.com/neovim/nvim-lspconfig' },
+  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
+  { src = 'https://github.com/ellisonleao/gruvbox.nvim' },
+  {
+    src = 'https://github.com/ThePrimeagen/harpoon',
+    version = 'harpoon2',
+  },
+  { src = 'https://github.com/tpope/vim-fugitive' },
+  { src = 'https://github.com/folke/trouble.nvim' },
+  { src = 'https://github.com/nvim-telescope/telescope-fzf-native.nvim' },
+  { src = 'https://github.com/nvim-telescope/telescope.nvim',           version = vim.version.range('0.1.x') },
+})
+
+
 require("gruvbox").setup({
-  undercurl = true,
-  underline = true,
-  bold = true,
   italic = {
     strings = false,
     comments = false,
     operators = false,
     folds = false,
   },
-  strikethrough = true,
-  invert_selection = false,
-  invert_signs = false,
-  invert_tabline = false,
-  invert_intend_guides = false,
-  inverse = true, -- invert background for search, diffs, statuslines and errors
-  contrast = "", -- can be "hard", "soft" or empty string
-  palette_overrides = {},
-  overrides = {},
-  dim_inactive = false,
-  transparent_mode = false,
 })
-vim.o.background = "dark" -- or "light" for light mode
-vim.cmd([[colorscheme gruvbox]])
 
--- General
-vim.g.mapleader =";"
+vim.o.background = "dark"
+vim.cmd("colorscheme gruvbox")
 
-vim.keymap.set({"n", "v"}, "<leader>d", '"_d')
-
-vim.cmd [[ map <C-t> :tabnew<CR> ]]
-
-vim.api.nvim_set_keymap("n", "<leader>nn", ":NERDTreeMirror<CR>:NERDTreeFocus<CR>", {noremap = true})
-vim.api.nvim_set_keymap("n", "<leader>nf", ":NERDTreeFind<CR>", {noremap = true})
-vim.api.nvim_set_keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", {noremap = true})
-vim.api.nvim_set_keymap("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", {noremap = true})
-vim.api.nvim_set_keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", {noremap = true})
-vim.api.nvim_set_keymap("n", "<leader>fr", "<cmd>Telescope registers<cr>", {noremap = true})
-
-vim.api.nvim_set_keymap("n", "<leader>U", ":UndotreeToggle<CR>", {noremap = true})
-
-vim.wo.number = true
-vim.api.nvim_command('set mouse=a')
-vim.api.nvim_command('set undofile')
-vim.api.nvim_command('set clipboard+=unnamedplus')
-vim.opt.hlsearch = false
-vim.opt.incsearch = true
-vim.api.nvim_command('set ignorecase')
-vim.api.nvim_command('set incsearch')
-vim.api.nvim_command('set smartcase')
-vim.api.nvim_command('set signcolumn=number')
-vim.api.nvim_command('set autoread')
-vim.api.nvim_command('set backspace=2')
-vim.api.nvim_command('set colorcolumn=80')
-vim.api.nvim_command('set hidden')
-vim.api.nvim_command('set laststatus=2')
-vim.api.nvim_command('set ruler')
-vim.api.nvim_command('set scrolloff=8')
-vim.api.nvim_command('set sidescrolloff=5')
-vim.api.nvim_command('set showmatch')
-vim.api.nvim_command('set showmode')
-vim.api.nvim_command('set splitbelow')
-vim.api.nvim_command('set splitright')
-vim.api.nvim_command('set title')
-vim.api.nvim_command('set visualbell')
-vim.api.nvim_command('set expandtab')
-vim.api.nvim_command('set tabstop=2')
-vim.api.nvim_command('set softtabstop=2')
-vim.api.nvim_command('set shiftwidth=2')
-vim.api.nvim_command('set relativenumber')
-vim.wo.colorcolumn = ""
-
--- Fix windows issue with paths?
-vim.api.nvim_command('set shellslash')
-
-
-vim.cmd [[ autocmd BufWritePre * :%s/\s\+$//e ]]  -- Remove trailing whitespace
-vim.cmd [[ au BufRead,BufNewFile *.make set syntax=make ]]
-
-
-vim.keymap.set("x", "<leader>p", [["_dP]])
-vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
-vim.keymap.set("n", "<leader>Y", [["+Y]])
-
-
-vim.opt["smartindent"] = true
-vim.opt["wrap"] = true
-
-
--- Nerd tree stuff
-vim.cmd [[ autocmd StdinReadPre * let s:std_in=1 ]]
-vim.cmd [[ autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif ]]
-vim.cmd [[ :let g:NERDTreeWinSize=45 ]]
-vim.cmd [[ :let g:NERDTreeQuitOnOpen=1 ]]
-vim.cmd [[ :let g:NERDTreeShowHidden=1 ]]
-
-
--- Setup nvim-autopairs.
-local status_ok, npairs = pcall(require, "nvim-autopairs")
-if not status_ok then
-  return
-end
-
-npairs.setup {
-  check_ts = true,
-  ts_config = {
-    lua = { "string", "source" },
-    javascript = { "string", "template_string" },
-    java = false,
-  },
-  disable_filetype = { "TelescopePrompt", "spectre_panel" },
-  fast_wrap = {
-    map = "<M-e>",
-    chars = { "{", "[", "(", '"', "'" },
-    pattern = string.gsub([[ [%'%"%)%>%]%)%}%,] ]], "%s+", ""),
-    offset = 0, -- Offset from pattern match
-    end_key = "$",
-    keys = "qwertyuiopzxcvbnmasdfghjkl",
-    check_comma = true,
-    highlight = "PmenuSel",
-    highlight_grey = "LineNr",
-  },
-}
-
-
--- Setup comments
-local status_ok, comment = pcall(require, "Comment")
-if not status_ok then
-  return
-end
-
-comment.setup {
-  pre_hook = function(ctx)
-    local U = require "Comment.utils"
-
-    local location = nil
-    if ctx.ctype == U.ctype.block then
-      location = require("ts_context_commentstring.utils").get_cursor_location()
-    elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
-      location = require("ts_context_commentstring.utils").get_visual_start_location()
+vim.lsp.config('lua_ls', {
+  on_init = function(client)
+    if client.workspace_folders then
+      local path = client.workspace_folders[1].name
+      if
+          path ~= vim.fn.stdpath('config')
+          and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+      then
+        return
+      end
     end
 
-    return require("ts_context_commentstring.internal").calculate_commentstring {
-      key = ctx.ctype == U.ctype.line and "__default" or "__multiline",
-      location = location,
-    }
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        version = 'LuaJIT',
+        path = {
+          'lua/?.lua',
+          'lua/?/init.lua',
+        },
+      },
+      -- Make the server aware of Neovim runtime files
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME
+        }
+      }
+    })
   end,
-}
+  settings = {
+    Lua = {
+      format = {
+        enable = true,
+        defaultConfig = {
+          indent_style = "space",
+          indent_size = "2",
+        }
+      },
+    }
+  }
+})
 
--- Setup telescope
-require('telescope').setup{ defaults = { file_ignore_patterns = {
-  "node_modules", "yarn.lock", "chunk.js", "chunk.js.map", "requirements.txt"
-}}}
+vim.lsp.enable('lua_ls')
+vim.lsp.enable('ts_ls')
+vim.lsp.enable('nixd')
 
-
--- Setup treesitter
-local status_ok, configs = pcall(require, "nvim-treesitter.configs")
-if not status_ok then
-    return
-end
-
-require 'nvim-treesitter.install'.compilers = { 'zig' }
-
-configs.setup({
-  ensure_installed = "all", -- one of "all" or a list of languages
-  sync_install = true,
-  ignore_install = { "phpdoc", "agda", "htmldjango" }, -- List of parsers to ignore installing
+require('nvim-treesitter.configs').setup({
+  ensure_installed = {
+    'javascript',
+    'typescript',
+    'lua',
+    'nix',
+    'nu',
+  },
   highlight = {
     enable = true,
-    additional_vim_regex_highlighting = false,
   },
   incremental_selection = {
     enable = true,
@@ -200,54 +161,57 @@ configs.setup({
   },
   indent = {
     enable = true,
+    disable = function(lang, buf)
+      if lang == "html" then
+        return true
+      end
+
+      local max_filesize = 100 * 1024 -- 100 KB
+      local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+      if ok and stats and stats.size > max_filesize then
+        vim.notify(
+          "File larger than 100KB treesitter disabled for performance",
+          vim.log.levels.WARN,
+          { title = "Treesitter" }
+        )
+        return true
+      end
+    end,
   },
 })
 
--- Setup blankline
-require("ibl").setup({
-  indent = { char = "│" },
-  scope = {
-    enabled = true,
-    show_start = false
-  },
-  whitespace = { remove_blankline_trail = false },
-  exclude = {
-    buftypes = { "terminal", "nofile", "quickfix", "prompt", "packer", "NvimTree" },
-    filetypes = { "help", "startify", "dashboard", "packer", "Yanil" },
-  },
+local harpoon = require("harpoon")
+harpoon.setup()
+vim.keymap.set("n", "<leader>A", function() harpoon:list():prepend() end)
+vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end)
+vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 
+vim.keymap.set("n", "<C-h>", function() harpoon:list():select(1) end)
+vim.keymap.set("n", "<C-t>", function() harpoon:list():select(2) end)
+vim.keymap.set("n", "<C-n>", function() harpoon:list():select(3) end)
+vim.keymap.set("n", "<C-s>", function() harpoon:list():select(4) end)
+
+-- Toggle previous & next buffers stored within Harpoon list
+vim.keymap.set("n", "<C-S-P>", function() harpoon:list():prev() end)
+vim.keymap.set("n", "<C-S-N>", function() harpoon:list():next() end)
+
+require('trouble').setup({
+  icons = false,
 })
+vim.keymap.set("n", "<leader>tt", function() require("trouble").toggle() end)
+vim.keymap.set("n", "[t", function() require("trouble").next({ skip_groups = true, jump = true }); end)
+vim.keymap.set("n", "]t", function() require("trouble").previous({ skip_groups = true, jump = true }); end)
 
-local status_ok, bufferline = pcall(require, "bufferline")
-if not status_ok then
-    return
-end
+require('telescope').setup({})
+require('telescope').load_extension('fzf')
 
-bufferline.setup {
-    options = {
-        mode = "tabs", -- set to "tabs" to only show tabpages instead
-        numbers = "ordinal",
-        --indicator_icon = '',
-        indicator = { style = "icon", icon = "" },
-        buffer_close_icon = '',
-        modified_icon = '',
-        close_icon = '',
-        left_trunc_marker = '',
-        right_trunc_marker = '',
-        max_name_length = 100,
-        max_prefix_length = 18, -- prefix used when a buffer is de-duplicated
-        tab_size = 20,
-        diagnostics = false,
-        diagnostics_update_in_insert = false,
-        color_icons = false, -- whether or not to add the filetype icon highlights
-        show_buffer_icons = false, -- disable filetype icons for buffers
-        show_buffer_close_icons = false,
-        --[[ show_buffer_default_icon = false, -- whether or not an unrecognised filetype should show a default icon ]]
-        show_close_icon = false,
-        show_tab_indicators = false,
-        separator_style = "thin",
-        enforce_regular_tabs = false,
-        offsets = { { filetype = "NvimTree", text = "", padding = 1 } },
-    },
-}
-vim.api.nvim_set_keymap("n", "<leader>gb", ":BufferLinePick<CR>", {noremap = true})
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
+vim.keymap.set('n', '<C-p>', builtin.git_files, {})
+vim.keymap.set('n', '<leader>pws', function()
+  local word = vim.fn.expand("<cword>")
+  builtin.grep_string({ search = word })
+end)
+vim.keymap.set('n', '<leader>ps', function()
+  builtin.grep_string({ search = vim.fn.input("Grep > ") })
+end)
