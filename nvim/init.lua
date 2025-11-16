@@ -138,6 +138,7 @@ vim.lsp.config('lua_ls', {
 vim.lsp.enable('lua_ls')
 vim.lsp.enable('ts_ls')
 vim.lsp.enable('nixd')
+vim.lsp.enable('jsonls')
 
 require('nvim-treesitter.configs').setup({
   ensure_installed = {
@@ -146,6 +147,8 @@ require('nvim-treesitter.configs').setup({
     'lua',
     'nix',
     'nu',
+    'tsx',
+    'json',
   },
   highlight = {
     enable = true,
