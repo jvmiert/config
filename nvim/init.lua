@@ -198,13 +198,6 @@ vim.keymap.set("n", "<C-s>", function() harpoon:list():select(4) end)
 vim.keymap.set("n", "<C-S-P>", function() harpoon:list():prev() end)
 vim.keymap.set("n", "<C-S-N>", function() harpoon:list():next() end)
 
-require('trouble').setup({
-  icons = false,
-})
-vim.keymap.set("n", "<leader>tt", function() require("trouble").toggle() end)
-vim.keymap.set("n", "[t", function() require("trouble").next({ skip_groups = true, jump = true }); end)
-vim.keymap.set("n", "]t", function() require("trouble").previous({ skip_groups = true, jump = true }); end)
-
 require('telescope').setup({})
 require('telescope').load_extension('fzf')
 
@@ -218,3 +211,12 @@ end)
 vim.keymap.set('n', '<leader>ps', function()
   builtin.grep_string({ search = vim.fn.input("Grep > ") })
 end)
+
+local trouble = require('trouble')
+trouble.setup({ focus = false })
+
+vim.keymap.set("n", "<leader>tt", function() require("trouble").toggle({ mode = "diagnostics" }) end)
+vim.keymap.set("n", "[t",
+  function() require("trouble").next({ mode = "diagnostics" }); end)
+vim.keymap.set("n", "]t",
+  function() require("trouble").prev({ mode = "diagnostics" }); end)
