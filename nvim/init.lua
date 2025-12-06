@@ -24,9 +24,12 @@ vim.opt.undofile    = true                            --
 
 vim.g.mapleader     = ";"                             -- Set ; as the leader key
 
-local augroup       = vim.api.nvim_create_augroup
-local autocmd       = vim.api.nvim_create_autocmd
-local jeroenGroup   = augroup('jeroen', {})
+
+vim.keymap.set("n", "<leader>6", "<C-^>")
+
+local augroup     = vim.api.nvim_create_augroup
+local autocmd     = vim.api.nvim_create_autocmd
+local jeroenGroup = augroup('jeroen', {})
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = augroup('my.lsp', {}),
@@ -198,19 +201,37 @@ vim.keymap.set("n", "<C-s>", function() harpoon:list():select(4) end)
 vim.keymap.set("n", "<C-S-P>", function() harpoon:list():prev() end)
 vim.keymap.set("n", "<C-S-N>", function() harpoon:list():next() end)
 
-require('telescope').setup({})
+local telescopeConfig = require("telescope.config")
+
+-- Clone the default Telescope configuration
+local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
+
+-- I want to search in hidden/dot files.
+table.insert(vimgrep_arguments, "--hidden")
+-- I don't want to search in the `.git` directory.
+table.insert(vimgrep_arguments, "--glob")
+table.insert(vimgrep_arguments, "!**/.git/*")
+
+require('telescope').setup({
+  defaults = {
+    vimgrep_arguments = vimgrep_arguments,
+    preview = {
+      filesize_limit = 0.1, -- MB
+    },
+    pickers = {
+      find_files = {
+        -- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
+        find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+      },
+    },
+  }
+})
 require('telescope').load_extension('fzf')
 
 local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
 vim.keymap.set('n', '<C-p>', builtin.git_files, {})
-vim.keymap.set('n', '<leader>pws', function()
-  local word = vim.fn.expand("<cword>")
-  builtin.grep_string({ search = word })
-end)
-vim.keymap.set('n', '<leader>ps', function()
-  builtin.grep_string({ search = vim.fn.input("Grep > ") })
-end)
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
 
 local trouble = require('trouble')
 trouble.setup({ focus = false })
