@@ -27,6 +27,16 @@ vim.g.mapleader     = ";"                             -- Set ; as the leader key
 
 vim.keymap.set("n", "<leader>6", "<C-^>")
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "python",
+  callback = function()
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.tabstop = 2
+    vim.opt_local.softtabstop = 2
+    vim.opt_local.expandtab = true
+  end,
+})
+
 local augroup     = vim.api.nvim_create_augroup
 local autocmd     = vim.api.nvim_create_autocmd
 local jeroenGroup = augroup('jeroen', {})
