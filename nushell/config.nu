@@ -39,3 +39,14 @@ $env.config = {
   }
 }
 alias ls = ls -a
+alias ga = git add
+alias gc = git commit
+alias gco = git checkout
+alias gcp = git cherry-pick
+alias gdiff = git diff
+alias gl = git prettylog
+alias gp = git push
+alias gs = git status
+alias gt = git tag
+alias vi = nvim
+alias vim = nvim
