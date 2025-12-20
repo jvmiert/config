@@ -91,6 +91,7 @@ vim.pack.add({
   { src = 'https://github.com/folke/trouble.nvim' },
   { src = 'https://github.com/nvim-telescope/telescope-fzf-native.nvim' },
   { src = 'https://github.com/nvim-telescope/telescope.nvim',           version = vim.version.range('0.1.x') },
+  { src = 'https://github.com/dmtrKovalenko/fff.nvim' },
 })
 
 
@@ -240,7 +241,7 @@ require('telescope').setup({
 require('telescope').load_extension('fzf')
 
 local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+-- vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
 vim.keymap.set('n', '<C-p>', builtin.git_files, {})
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
 
@@ -252,3 +253,12 @@ vim.keymap.set("n", "[t",
   function() require("trouble").next({ mode = "diagnostics" }); end)
 vim.keymap.set("n", "]t",
   function() require("trouble").prev({ mode = "diagnostics" }); end)
+
+require('fff').setup({})
+
+vim.keymap.set(
+  'n',
+  '<leader>ff',
+  function() require('fff').find_files() end,
+  { desc = 'FFFind files' }
+)
