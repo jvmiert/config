@@ -92,6 +92,7 @@ vim.pack.add({
   { src = 'https://github.com/nvim-telescope/telescope-fzf-native.nvim' },
   { src = 'https://github.com/nvim-telescope/telescope.nvim',           version = vim.version.range('0.1.x') },
   { src = 'https://github.com/dmtrKovalenko/fff.nvim' },
+  { src = 'https://github.com/stevearc/conform.nvim' },
 })
 
 
@@ -262,3 +263,20 @@ vim.keymap.set(
   function() require('fff').find_files() end,
   { desc = 'FFFind files' }
 )
+
+require("conform").setup({
+  formatters_by_ft = {
+    lua = { "stylua" },
+    python = { "isort", "black" },
+    javascript = { "prettierd", "prettier", stop_after_first = true },
+    typescript = { "prettierd", "prettier", stop_after_first = true },
+    nix = { "nixfmt" },
+  },
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*",
+  callback = function(args)
+    require("conform").format({ bufnr = args.buf })
+  end,
+})
