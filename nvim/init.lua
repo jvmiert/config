@@ -1,153 +1,122 @@
 vim.opt.clipboard:append({ "unnamed", "unnamedplus" }) -- Use system clipboard by default
 
-vim.opt.hlsearch = true                                -- Highlight matches while searching
-vim.opt.ignorecase = true                              -- Ignore case while searching, by default
-vim.opt.incsearch = true                               -- Enable incremental search by default
+vim.opt.hlsearch = true -- Highlight matches while searching
+vim.opt.ignorecase = true -- Ignore case while searching, by default
+vim.opt.incsearch = true -- Enable incremental search by default
 
-vim.opt.expandtab = true                               -- Use spaces by default instead of tabs
-vim.opt.tabstop = 2                                    -- How wide a tab looks when displayed
-vim.opt.shiftwidth = 2                                 -- How many spaces to indent by
-vim.opt.softtabstop = 2                                -- How many spaces to insert when pressing TAB
-vim.opt.smartindent = true                             --
-vim.opt.wrap = true                                    --
+vim.opt.expandtab = true -- Use spaces by default instead of tabs
+vim.opt.tabstop = 2 -- How wide a tab looks when displayed
+vim.opt.shiftwidth = 2 -- How many spaces to indent by
+vim.opt.softtabstop = 2 -- How many spaces to insert when pressing TAB
+vim.opt.smartindent = true --
+vim.opt.wrap = true --
 
-vim.opt.signcolumn = "yes"                             -- Fixed left column width for lsp diag.
+vim.opt.signcolumn = "yes" -- Fixed left column width for lsp diag.
 
-vim.opt.number = true                                  -- Enable line numbers
-vim.opt.rnu = true                                     -- Make the line numbers relative
+vim.opt.number = true -- Enable line numbers
+vim.opt.rnu = true -- Make the line numbers relative
 
-vim.opt.scrolloff = 8                                  --
+vim.opt.scrolloff = 8 --
 
-vim.opt.swapfile = false                               --
-vim.opt.backup = false                                 --
-vim.opt.undofile = true                                --
+vim.opt.swapfile = false --
+vim.opt.backup = false --
+vim.opt.undofile = true --
 
-vim.g.mapleader = ";"                                  -- Set ; as the leader key
+vim.g.mapleader = ";" -- Set ; as the leader key
 
 vim.keymap.set("n", "<leader>6", "<C-^>")
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "python",
-  callback = function()
-    vim.opt_local.shiftwidth = 2
-    vim.opt_local.tabstop = 2
-    vim.opt_local.softtabstop = 2
-    vim.opt_local.expandtab = true
-  end,
-})
-
-local augroup = vim.api.nvim_create_augroup
-local autocmd = vim.api.nvim_create_autocmd
-local jeroenGroup = augroup("jeroen", {})
-
-vim.api.nvim_create_autocmd("LspAttach", {
-  group = augroup("my.lsp", {}),
-  callback = function(args)
-    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-    -- Auto-format ("lint") on save.
-    -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
-    if
-        not client:supports_method("textDocument/willSaveWaitUntil")
-        and client:supports_method("textDocument/formatting")
-    then
-      autocmd("BufWritePre", {
-        group = augroup("my.lsp", { clear = false }),
-        buffer = args.buf,
-        callback = function()
-          vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
-        end,
-      })
-    end
-  end,
-})
-
-autocmd("BufWritePre", {
-  group = jeroenGroup,
-  pattern = "*",
-  command = [[%s/\s\+$//e]],
+	pattern = "python",
+	callback = function()
+		vim.opt_local.shiftwidth = 2
+		vim.opt_local.tabstop = 2
+		vim.opt_local.softtabstop = 2
+		vim.opt_local.expandtab = true
+	end,
 })
 
 local hooks = function(ev)
-  -- Use available |event-data|
-  local name, kind = ev.data.spec.name, ev.data.kind
-  -- Run build script after plugin's code has changed
-  if name == "telescope-fzf-native.nvim" and (kind == "install" or kind == "update") then
-    vim.system({ "make" }, { cwd = ev.data.path })
-  end
+	-- Use available |event-data|
+	local name, kind = ev.data.spec.name, ev.data.kind
+	-- Run build script after plugin's code has changed
+	if name == "telescope-fzf-native.nvim" and (kind == "install" or kind == "update") then
+		vim.system({ "make" }, { cwd = ev.data.path })
+	end
 end
 
 -- If hooks need to run on install, run this before `vim.pack.add()`
 vim.api.nvim_create_autocmd("PackChanged", { callback = hooks })
 
 vim.pack.add({
-  { src = "https://github.com/nvim-lua/plenary.nvim" },
-  { src = "https://github.com/neovim/nvim-lspconfig" },
-  { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
-  { src = "https://github.com/ellisonleao/gruvbox.nvim" },
-  {
-    src = "https://github.com/ThePrimeagen/harpoon",
-    version = "harpoon2",
-  },
-  { src = "https://github.com/tpope/vim-fugitive" },
-  { src = "https://github.com/folke/trouble.nvim" },
-  { src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
-  { src = "https://github.com/nvim-telescope/telescope.nvim",           version = vim.version.range("0.1.x") },
-  { src = "https://github.com/dmtrKovalenko/fff.nvim" },
-  { src = "https://github.com/stevearc/conform.nvim" },
+	{ src = "https://github.com/nvim-lua/plenary.nvim" },
+	{ src = "https://github.com/neovim/nvim-lspconfig" },
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+	{ src = "https://github.com/ellisonleao/gruvbox.nvim" },
+	{
+		src = "https://github.com/ThePrimeagen/harpoon",
+		version = "harpoon2",
+	},
+	{ src = "https://github.com/tpope/vim-fugitive" },
+	{ src = "https://github.com/folke/trouble.nvim" },
+	{ src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
+	{ src = "https://github.com/nvim-telescope/telescope.nvim", version = vim.version.range("0.1.x") },
+	{ src = "https://github.com/dmtrKovalenko/fff.nvim" },
+	{ src = "https://github.com/stevearc/conform.nvim" },
 })
 
 require("gruvbox").setup({
-  italic = {
-    strings = false,
-    comments = false,
-    operators = false,
-    folds = false,
-  },
+	italic = {
+		strings = false,
+		comments = false,
+		operators = false,
+		folds = false,
+	},
 })
 
 vim.o.background = "dark"
 vim.cmd("colorscheme gruvbox")
 
 vim.lsp.config("lua_ls", {
-  on_init = function(client)
-    if client.workspace_folders then
-      local path = client.workspace_folders[1].name
-      if
-          path ~= vim.fn.stdpath("config")
-          and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
-      then
-        return
-      end
-    end
+	on_init = function(client)
+		if client.workspace_folders then
+			local path = client.workspace_folders[1].name
+			if
+				path ~= vim.fn.stdpath("config")
+				and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
+			then
+				return
+			end
+		end
 
-    client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-      runtime = {
-        version = "LuaJIT",
-        path = {
-          "lua/?.lua",
-          "lua/?/init.lua",
-        },
-      },
-      -- Make the server aware of Neovim runtime files
-      workspace = {
-        checkThirdParty = false,
-        library = {
-          vim.env.VIMRUNTIME,
-        },
-      },
-    })
-  end,
-  settings = {
-    Lua = {
-      format = {
-        enable = true,
-        defaultConfig = {
-          indent_style = "space",
-          indent_size = "2",
-        },
-      },
-    },
-  },
+		client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+			runtime = {
+				version = "LuaJIT",
+				path = {
+					"lua/?.lua",
+					"lua/?/init.lua",
+				},
+			},
+			-- Make the server aware of Neovim runtime files
+			workspace = {
+				checkThirdParty = false,
+				library = {
+					vim.env.VIMRUNTIME,
+				},
+			},
+		})
+	end,
+	settings = {
+		Lua = {
+			format = {
+				enable = true,
+				defaultConfig = {
+					indent_style = "space",
+					indent_size = "2",
+				},
+			},
+		},
+	},
 })
 
 vim.lsp.enable("ruff")
@@ -157,79 +126,79 @@ vim.lsp.enable("nixd")
 vim.lsp.enable("jsonls")
 
 require("nvim-treesitter.configs").setup({
-  ensure_installed = {
-    "javascript",
-    "typescript",
-    "lua",
-    "nix",
-    "nu",
-    "tsx",
-    "json",
-  },
-  highlight = {
-    enable = true,
-  },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "gnn",
-      node_incremental = "grn",
-      scope_incremental = "grc",
-      node_decremental = "grm",
-    },
-  },
-  indent = {
-    enable = true,
-    disable = function(lang, buf)
-      if lang == "html" then
-        return true
-      end
+	ensure_installed = {
+		"javascript",
+		"typescript",
+		"lua",
+		"nix",
+		"nu",
+		"tsx",
+		"json",
+	},
+	highlight = {
+		enable = true,
+	},
+	incremental_selection = {
+		enable = true,
+		keymaps = {
+			init_selection = "gnn",
+			node_incremental = "grn",
+			scope_incremental = "grc",
+			node_decremental = "grm",
+		},
+	},
+	indent = {
+		enable = true,
+		disable = function(lang, buf)
+			if lang == "html" then
+				return true
+			end
 
-      local max_filesize = 100 * 1024 -- 100 KB
-      local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-      if ok and stats and stats.size > max_filesize then
-        vim.notify(
-          "File larger than 100KB treesitter disabled for performance",
-          vim.log.levels.WARN,
-          { title = "Treesitter" }
-        )
-        return true
-      end
-    end,
-  },
+			local max_filesize = 100 * 1024 -- 100 KB
+			local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+			if ok and stats and stats.size > max_filesize then
+				vim.notify(
+					"File larger than 100KB treesitter disabled for performance",
+					vim.log.levels.WARN,
+					{ title = "Treesitter" }
+				)
+				return true
+			end
+		end,
+	},
 })
 
 local harpoon = require("harpoon")
 harpoon.setup()
 vim.keymap.set("n", "<leader>A", function()
-  harpoon:list():prepend()
+	harpoon:list():prepend()
 end)
 vim.keymap.set("n", "<leader>a", function()
-  harpoon:list():add()
+	harpoon:list():add()
 end)
 vim.keymap.set("n", "<C-e>", function()
-  harpoon.ui:toggle_quick_menu(harpoon:list())
+	harpoon.ui:toggle_quick_menu(harpoon:list())
 end)
 
 vim.keymap.set("n", "<C-h>", function()
-  harpoon:list():select(1)
+	harpoon:list():select(1)
 end)
 vim.keymap.set("n", "<C-t>", function()
-  harpoon:list():select(2)
+	harpoon:list():select(2)
 end)
 vim.keymap.set("n", "<C-n>", function()
-  harpoon:list():select(3)
+	harpoon:list():select(3)
 end)
 vim.keymap.set("n", "<C-s>", function()
-  harpoon:list():select(4)
+	harpoon:list():select(4)
 end)
 
 -- Toggle previous & next buffers stored within Harpoon list
 vim.keymap.set("n", "<C-S-P>", function()
-  harpoon:list():prev()
+	harpoon:list():prev()
 end)
 vim.keymap.set("n", "<C-S-N>", function()
-  harpoon:list():next()
+	harpoon:list():next()
 end)
 
 local telescopeConfig = require("telescope.config")
@@ -244,18 +213,18 @@ table.insert(vimgrep_arguments, "--glob")
 table.insert(vimgrep_arguments, "!**/.git/*")
 
 require("telescope").setup({
-  defaults = {
-    vimgrep_arguments = vimgrep_arguments,
-    preview = {
-      filesize_limit = 0.1, -- MB
-    },
-    pickers = {
-      find_files = {
-        -- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
-        find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
-      },
-    },
-  },
+	defaults = {
+		vimgrep_arguments = vimgrep_arguments,
+		preview = {
+			filesize_limit = 0.1, -- MB
+		},
+		pickers = {
+			find_files = {
+				-- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
+				find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+			},
+		},
+	},
 })
 require("telescope").load_extension("fzf")
 
@@ -268,35 +237,37 @@ local trouble = require("trouble")
 trouble.setup({ focus = false })
 
 vim.keymap.set("n", "<leader>tt", function()
-  require("trouble").toggle({ mode = "diagnostics" })
+	require("trouble").toggle({ mode = "diagnostics" })
 end)
 vim.keymap.set("n", "[t", function()
-  require("trouble").next({ mode = "diagnostics" })
+	require("trouble").next({ mode = "diagnostics" })
 end)
 vim.keymap.set("n", "]t", function()
-  require("trouble").prev({ mode = "diagnostics" })
+	require("trouble").prev({ mode = "diagnostics" })
 end)
 
 require("fff").setup({})
 
 vim.keymap.set("n", "<leader>ff", function()
-  require("fff").find_files()
+	require("fff").find_files()
 end, { desc = "FFFind files" })
 
 require("conform").setup({
-  formatters_by_ft = {
-    lua = { "stylua" },
-    python = { "isort", "black" },
-    javascript = { "prettierd", "prettier", stop_after_first = true },
-    typescript = { "prettierd", "prettier", stop_after_first = true },
-    typescriptreact = { "prettierd", "prettier", stop_after_first = true },
-    nix = { "nixfmt" },
-  },
-})
-
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*",
-  callback = function(args)
-    require("conform").format({ bufnr = args.buf })
-  end,
+	formatters_by_ft = {
+		lua = { "stylua" },
+		python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
+		javascript = { "prettierd", "prettier", stop_after_first = true },
+		javascriptreact = { "prettierd", "prettier", stop_after_first = true },
+		typescript = { "prettierd", "prettier", stop_after_first = true },
+		typescriptreact = { "prettierd", "prettier", stop_after_first = true },
+		html = { "prettierd", "prettier", stop_after_first = true },
+		css = { "prettierd", "prettier", stop_after_first = true },
+		nix = { "nixfmt" },
+		json = { "jq" },
+		["*"] = { "trim_whitespace" },
+	},
+	format_on_save = {
+		timeout_ms = 500,
+		lsp_format = "fallback",
+	},
 })
