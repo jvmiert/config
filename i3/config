@@ -50,7 +50,6 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # No background
 exec --no-startup-id xsetroot -solid "$back"
 
-
 #----------------------------------------------------------------------
 # Keybindings
 #----------------------------------------------------------------------
@@ -60,7 +59,7 @@ floating_modifier $mod
 bindsym $mod+o exec rofi -show run
 
 # start a terminal
-bindsym $mod+n exec ghostty --gtk-single-instance=true
+bindsym $mod+n exec ghostty +new-window
 bindsym $mod+d split h
 bindsym $mod+Shift+d split v
 
@@ -223,13 +222,13 @@ set $darkgray #1d2021
 #start of bar section
 bar {
     position bottom
-    status_command i3status 
+    status_command i3status
     colors {
         # bar background color
         background $bg
         # text color used for blocks that do not have a color specified.
         statusline $yellow
-        # workspaces section            
+        # workspaces section
         #                    border  backgr. text
         focused_workspace    $yellow $yellow $darkgray
         inactive_workspace   $darkgray $darkgray $yellow
