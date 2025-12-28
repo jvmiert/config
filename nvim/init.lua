@@ -124,6 +124,7 @@ vim.lsp.enable("lua_ls")
 vim.lsp.enable("ts_ls")
 vim.lsp.enable("nixd")
 vim.lsp.enable("jsonls")
+vim.lsp.enable("oxlint")
 
 require("nvim-treesitter.configs").setup({
 	ensure_installed = {
@@ -256,13 +257,13 @@ require("conform").setup({
 	formatters_by_ft = {
 		lua = { "stylua" },
 		python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
-		javascript = { "prettierd", "prettier", stop_after_first = true },
-		javascriptreact = { "prettierd", "prettier", stop_after_first = true },
-		typescript = { "prettierd", "prettier", stop_after_first = true },
-		typescriptreact = { "prettierd", "prettier", stop_after_first = true },
-		html = { "prettierd", "prettier", stop_after_first = true },
-		css = { "prettierd", "prettier", stop_after_first = true },
-		nix = { "nixfmt" },
+		javascript = { "oxfmt", stop_after_first = true },
+		javascriptreact = { "oxfmt", stop_after_first = true },
+		typescript = { "oxfmt", stop_after_first = true },
+		typescriptreact = { "oxfmt", stop_after_first = true },
+		html = { "oxfmt", stop_after_first = true },
+		css = { "oxfmt", stop_after_first = true },
+		nix = { "alejandra" },
 		json = { "jq" },
 		["*"] = { "trim_whitespace" },
 	},
