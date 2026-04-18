@@ -127,15 +127,8 @@ vim.lsp.enable("jsonls")
 vim.lsp.enable("oxlint")
 
 require("nvim-treesitter.configs").setup({
-	ensure_installed = {
-		"javascript",
-		"typescript",
-		"lua",
-		"nix",
-		"nu",
-		"tsx",
-		"json",
-	},
+	auto_install = false,
+	sync_install = false,
 	highlight = {
 		enable = true,
 	},
