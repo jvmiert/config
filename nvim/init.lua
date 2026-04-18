@@ -51,7 +51,6 @@ vim.api.nvim_create_autocmd("PackChanged", { callback = hooks })
 vim.pack.add({
 	{ src = "https://github.com/nvim-lua/plenary.nvim" },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
-	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
 	{ src = "https://github.com/ellisonleao/gruvbox.nvim" },
 	{
 		src = "https://github.com/ThePrimeagen/harpoon",
@@ -63,6 +62,19 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-telescope/telescope.nvim", version = vim.version.range("0.1.x") },
 	{ src = "https://github.com/dmtrKovalenko/fff.nvim" },
 	{ src = "https://github.com/stevearc/conform.nvim" },
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
+})
+
+vim.api.nvim_create_autocmd("PackChanged", {
+	callback = function(ev)
+		local name, kind = ev.data.spec.name, ev.data.kind
+		if name == "fff.nvim" and (kind == "install" or kind == "update") then
+			if not ev.data.active then
+				vim.cmd.packadd("fff.nvim")
+			end
+			require("fff.download").download_or_build_binary()
+		end
+	end,
 })
 
 require("gruvbox").setup({
@@ -125,42 +137,6 @@ vim.lsp.enable("ts_ls")
 vim.lsp.enable("nixd")
 vim.lsp.enable("jsonls")
 vim.lsp.enable("oxlint")
-
-require("nvim-treesitter.configs").setup({
-	auto_install = false,
-	sync_install = false,
-	highlight = {
-		enable = true,
-	},
-	incremental_selection = {
-		enable = true,
-		keymaps = {
-			init_selection = "gnn",
-			node_incremental = "grn",
-			scope_incremental = "grc",
-			node_decremental = "grm",
-		},
-	},
-	indent = {
-		enable = true,
-		disable = function(lang, buf)
-			if lang == "html" then
-				return true
-			end
-
-			local max_filesize = 100 * 1024 -- 100 KB
-			local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-			if ok and stats and stats.size > max_filesize then
-				vim.notify(
-					"File larger than 100KB treesitter disabled for performance",
-					vim.log.levels.WARN,
-					{ title = "Treesitter" }
-				)
-				return true
-			end
-		end,
-	},
-})
 
 local harpoon = require("harpoon")
 harpoon.setup()
@@ -240,7 +216,13 @@ vim.keymap.set("n", "]t", function()
 	require("trouble").prev({ mode = "diagnostics" })
 end)
 
-require("fff").setup({})
+vim.g.fff = {
+	lazy_sync = true, -- start syncing only when the picker is open
+	debug = {
+		enabled = true,
+		show_scores = true,
+	},
+}
 
 vim.keymap.set("n", "<leader>ff", function()
 	require("fff").find_files()
@@ -264,4 +246,37 @@ require("conform").setup({
 		timeout_ms = 500,
 		lsp_format = "fallback",
 	},
+})
+
+require("nvim-treesitter").install({
+	"javascript",
+	"typescript",
+	"lua",
+	"nix",
+	"nu",
+	"tsx",
+	"json",
+	"css",
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+	group = vim.api.nvim_create_augroup("treesitter.setup", {}),
+	callback = function(args)
+		local buf = args.buf
+		local filetype = args.match
+
+		-- you need some mechanism to avoid running on buffers that do not
+		-- correspond to a language (like oil.nvim buffers), this implementation
+		-- checks if a parser exists for the current language
+		local language = vim.treesitter.language.get_lang(filetype) or filetype
+		if not vim.treesitter.language.add(language) then
+			return
+		end
+
+		-- replicate `highlight = { enable = true }`
+		vim.treesitter.start(buf, language)
+
+		-- replicate `indent = { enable = true }`
+		vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+	end,
 })
