@@ -201,7 +201,7 @@ require("telescope").load_extension("fzf")
 local builtin = require("telescope.builtin")
 -- vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
 vim.keymap.set("n", "<C-p>", builtin.git_files, {})
-vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
+-- vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
 
 local trouble = require("trouble")
 trouble.setup({ focus = false })
@@ -227,6 +227,9 @@ vim.g.fff = {
 vim.keymap.set("n", "<leader>ff", function()
 	require("fff").find_files()
 end, { desc = "FFFind files" })
+vim.keymap.set("n", "<leader>fg", function()
+	require("fff").live_grep()
+end, { desc = "LiFFFe grep" })
 
 require("conform").setup({
 	formatters_by_ft = {
