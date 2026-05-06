@@ -36,17 +36,29 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-local hooks = function(ev)
-	-- Use available |event-data|
-	local name, kind = ev.data.spec.name, ev.data.kind
-	-- Run build script after plugin's code has changed
-	if name == "telescope-fzf-native.nvim" and (kind == "install" or kind == "update") then
-		vim.system({ "make" }, { cwd = ev.data.path })
-	end
-end
+-- Post install hooks
+vim.api.nvim_create_autocmd("PackChanged", {
+	callback = function(ev)
+		local name, kind, path = ev.data.spec.name, ev.data.kind, ev.data.path
+		if name == "fff.nvim" and (kind == "install" or kind == "update") then
+			if not ev.data.active then
+				vim.cmd.packadd("fff.nvim")
+			end
+			require("fff.download").download_or_build_binary()
+		end
 
--- If hooks need to run on install, run this before `vim.pack.add()`
-vim.api.nvim_create_autocmd("PackChanged", { callback = hooks })
+		if name == "telescope-fzf-native.nvim" and (kind == "install" or kind == "update") then
+			vim.system({ "make" }, { cwd = ev.data.path })
+		end
+
+		if name == "blink.cmp" and (kind == "install" or kind == "update") then
+			vim.notify("Installing blink............")
+			local result = vim.system({ "cargo", "build", "--release" }, { cwd = path }):wait(60000)
+
+			vim.notify("Blink build code result: " .. result.code)
+		end
+	end,
+})
 
 vim.pack.add({
 	{ src = "https://github.com/nvim-lua/plenary.nvim" },
@@ -63,18 +75,31 @@ vim.pack.add({
 	{ src = "https://github.com/dmtrKovalenko/fff.nvim" },
 	{ src = "https://github.com/stevearc/conform.nvim" },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
+
+	{ src = "https://github.com/saghen/blink.lib" },
+	{ src = "https://github.com/saghen/blink.cmp" },
 })
 
-vim.api.nvim_create_autocmd("PackChanged", {
-	callback = function(ev)
-		local name, kind = ev.data.spec.name, ev.data.kind
-		if name == "fff.nvim" and (kind == "install" or kind == "update") then
-			if not ev.data.active then
-				vim.cmd.packadd("fff.nvim")
-			end
-			require("fff.download").download_or_build_binary()
-		end
-	end,
+vim.api.nvim_create_user_command("PackUpdate", "lua vim.pack.update()", {})
+
+require("blink.cmp").build()
+require("blink.cmp").setup({
+	completion = {
+		menu = {
+			auto_show = false,
+		},
+		ghost_text = {
+			enabled = false,
+		},
+	},
+	keymap = {
+		preset = "default",
+		["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
+	},
+	fuzzy = { implementation = "prefer_rust_with_warning" },
+	cmdline = {
+		completion = { menu = { auto_show = false } },
+	},
 })
 
 require("gruvbox").setup({
