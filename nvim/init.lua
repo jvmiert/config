@@ -100,6 +100,9 @@ require("blink.cmp").setup({
 	cmdline = {
 		completion = { menu = { auto_show = false } },
 	},
+	signature = {
+		enabled = false,
+	},
 })
 
 require("gruvbox").setup({
