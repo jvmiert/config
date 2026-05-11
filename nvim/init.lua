@@ -47,10 +47,6 @@ vim.api.nvim_create_autocmd("PackChanged", {
 			require("fff.download").download_or_build_binary()
 		end
 
-		if name == "telescope-fzf-native.nvim" and (kind == "install" or kind == "update") then
-			vim.system({ "make" }, { cwd = ev.data.path })
-		end
-
 		if name == "blink.cmp" and (kind == "install" or kind == "update") then
 			vim.notify("Installing blink............")
 			local result = vim.system({ "cargo", "build", "--release" }, { cwd = path }):wait(60000)
@@ -70,8 +66,6 @@ vim.pack.add({
 	},
 	{ src = "https://github.com/tpope/vim-fugitive" },
 	{ src = "https://github.com/folke/trouble.nvim" },
-	{ src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
-	{ src = "https://github.com/nvim-telescope/telescope.nvim", version = vim.version.range("0.1.x") },
 	{ src = "https://github.com/dmtrKovalenko/fff.nvim" },
 	{ src = "https://github.com/stevearc/conform.nvim" },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
@@ -199,38 +193,6 @@ vim.keymap.set("n", "<C-S-N>", function()
 	harpoon:list():next()
 end)
 
-local telescopeConfig = require("telescope.config")
-
--- Clone the default Telescope configuration
-local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
-
--- I want to search in hidden/dot files.
-table.insert(vimgrep_arguments, "--hidden")
--- I don't want to search in the `.git` directory.
-table.insert(vimgrep_arguments, "--glob")
-table.insert(vimgrep_arguments, "!**/.git/*")
-
-require("telescope").setup({
-	defaults = {
-		vimgrep_arguments = vimgrep_arguments,
-		preview = {
-			filesize_limit = 0.1, -- MB
-		},
-		pickers = {
-			find_files = {
-				-- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
-				find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
-			},
-		},
-	},
-})
-require("telescope").load_extension("fzf")
-
-local builtin = require("telescope.builtin")
--- vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-vim.keymap.set("n", "<C-p>", builtin.git_files, {})
--- vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
-
 local trouble = require("trouble")
 trouble.setup({ focus = false })
 
@@ -247,8 +209,8 @@ end)
 vim.g.fff = {
 	lazy_sync = true, -- start syncing only when the picker is open
 	debug = {
-		enabled = true,
-		show_scores = true,
+		enabled = false,
+		show_scores = false,
 	},
 }
 
