@@ -155,10 +155,24 @@ vim.lsp.config("lua_ls", {
 
 vim.lsp.enable("ruff")
 vim.lsp.enable("lua_ls")
+
+vim.lsp.config("ts_ls", {
+	settings = {
+		diagnostics = {
+			ignoredCodes = { 6133 },
+		},
+	},
+})
 vim.lsp.enable("ts_ls")
 
 vim.lsp.enable("nixd")
 vim.lsp.enable("jsonls")
+
+vim.lsp.config("oxlint", {
+	settings = {
+		run = "onSave",
+	},
+})
 vim.lsp.enable("oxlint")
 
 local harpoon = require("harpoon")
