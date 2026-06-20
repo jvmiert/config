@@ -155,15 +155,6 @@ vim.lsp.config("lua_ls", {
 
 vim.lsp.enable("ruff")
 vim.lsp.enable("lua_ls")
-
-vim.api.nvim_create_autocmd("LspAttach", {
-	callback = function(args)
-		local client = vim.lsp.get_client_by_id(args.data.client_id)
-		if client and client.name == "ts_ls" then
-			client.handlers["textDocument/publishDiagnostics"] = function() end
-		end
-	end,
-})
 vim.lsp.enable("ts_ls")
 
 vim.lsp.enable("nixd")
