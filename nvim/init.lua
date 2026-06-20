@@ -170,7 +170,7 @@ vim.lsp.enable("jsonls")
 
 vim.lsp.config("oxlint", {
 	settings = {
-		run = "onSave",
+		typeAware = false,
 	},
 })
 vim.lsp.enable("oxlint")
