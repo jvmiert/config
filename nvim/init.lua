@@ -159,7 +159,7 @@ vim.lsp.enable("lua_ls")
 vim.lsp.config("ts_ls", {
 	settings = {
 		diagnostics = {
-			ignoredCodes = { 6133 },
+			ignoredCodes = { 6133, 6192 },
 		},
 	},
 })
