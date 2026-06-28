@@ -248,6 +248,7 @@ require("conform").setup({
 		css = { "oxfmt", stop_after_first = true },
 		nix = { "alejandra" },
 		json = { "jq" },
+		jsonc = { "oxfmt" },
 		["*"] = { "trim_whitespace" },
 	},
 	format_on_save = {
