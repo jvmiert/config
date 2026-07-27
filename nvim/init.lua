@@ -26,6 +26,16 @@ vim.g.mapleader = ";" -- Set ; as the leader key
 
 vim.keymap.set("n", "<leader>6", "<C-^>")
 
+-- workaround for issue where harpoon switching would not detect filetype
+vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
+	callback = function(args)
+		if vim.bo[args.buf].filetype == "" then
+			vim.filetype.match({ buf = args.buf })
+			vim.cmd("filetype detect")
+		end
+	end,
+})
+
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "python",
 	callback = function()
