@@ -25,6 +25,10 @@
       "src": "https://github.com/ThePrimeagen/harpoon",
       "version": "'harpoon2'"
     },
+    "markdown-table-wrap.nvim": {
+      "rev": "a5b676360946c7bce48c0b717ab05929761b88c8",
+      "src": "https://github.com/ice345/markdown-table-wrap.nvim"
+    },
     "nvim-lspconfig": {
       "rev": "7ab79bb1b57160a537f427ac8a6026102f12b701",
       "src": "https://github.com/neovim/nvim-lspconfig"

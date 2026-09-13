@@ -79,6 +79,7 @@ vim.pack.add({
 	{ src = "https://github.com/dmtrKovalenko/fff.nvim" },
 	{ src = "https://github.com/stevearc/conform.nvim" },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
+	{ src = "https://github.com/ice345/markdown-table-wrap.nvim" },
 
 	{ src = "https://github.com/saghen/blink.lib" },
 	{ src = "https://github.com/saghen/blink.cmp" },
@@ -267,6 +268,19 @@ require("conform").setup({
 	},
 })
 
+-- markdown-table-wrap: pipe tables only, on demand.
+-- auto_preview = false => nothing happens until you call :MarkdownTables.
+require("markdown-table-wrap").setup({
+	auto_preview = false,
+	max_width_ratio = 0.95,
+	max_col_width = 40,
+})
+
+-- Peek at the table under the cursor in a float wrapped to fit (q/Esc closes).
+vim.api.nvim_create_user_command("MarkdownTables", "MarkdownTableFloatPreview", {
+	desc = "Preview markdown table (wrapped to fit)",
+})
+
 require("nvim-treesitter").install({
 	"javascript",
 	"typescript",
@@ -276,6 +290,8 @@ require("nvim-treesitter").install({
 	"tsx",
 	"json",
 	"css",
+	"markdown",
+	"markdown_inline",
 })
 
 vim.api.nvim_create_autocmd("FileType", {
