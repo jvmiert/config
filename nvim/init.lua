@@ -179,7 +179,40 @@ vim.lsp.enable("ts_ls")
 vim.lsp.enable("nixd")
 vim.lsp.enable("jsonls")
 
+-- Prefer repo-local pnpm devDeps (node_modules/.bin) over NixOS system binaries,
+-- fallback to PATH when outside a JS repo.
+local function resolve_js_bin(bin, start_dir)
+	local start = start_dir or vim.fn.getcwd()
+	if vim.fn.isdirectory(start) == 0 then
+		start = vim.fs.dirname(start)
+	end
+	local dirs = { start }
+	for dir in vim.fs.parents(start) do
+		table.insert(dirs, dir)
+	end
+	for _, dir in ipairs(dirs) do
+		local candidate = vim.fs.joinpath(dir, "node_modules", ".bin", bin)
+		if vim.uv.fs_stat(candidate) and vim.fn.executable(candidate) == 1 then
+			return candidate
+		end
+	end
+	return bin -- PATH fallback (NixOS system package)
+end
+
+-- Make default `oxlint`/`oxfmt` cmds also resolve when launched outside nix-shell PATH.
+do
+	local root = vim.fs.root(vim.fn.getcwd(), { "pnpm-workspace.yaml", "turbo.json", "package.json", ".git" })
+	if root then
+		local bindir = vim.fs.joinpath(root, "node_modules", ".bin")
+		if vim.fn.isdirectory(bindir) == 1 and not string.find(":" .. vim.env.PATH .. ":", ":" .. bindir .. ":", 1, true) then
+			vim.env.PATH = bindir .. ":" .. vim.env.PATH
+		end
+	end
+end
+
 vim.lsp.config("oxlint", {
+	cmd = { resolve_js_bin("oxlint"), "--lsp" },
+	root_markers = { "pnpm-workspace.yaml", "turbo.json", "package.json", ".git", "oxlintrc.json", ".oxlintrc.json" },
 	settings = {
 		typeAware = false,
 	},
@@ -248,6 +281,13 @@ vim.keymap.set("n", "<leader>fg", function()
 end, { desc = "LiFFFe grep" })
 
 require("conform").setup({
+	formatters = {
+		oxfmt = {
+			command = function(_, ctx)
+				return resolve_js_bin("oxfmt", ctx and ctx.dirname)
+			end,
+		},
+	},
 	formatters_by_ft = {
 		lua = { "stylua" },
 		python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
